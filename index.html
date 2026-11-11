@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ECE-311 Microprocessors Study Map</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: a lab notebook for chips. One sticky tab bar; the "Chain" view walks topic 1 -> 10, the other views are reference hubs (equations, comparisons, circuits, questions, practice). */
+:root{
+  --bg:#edf0f4; --surface:#ffffff; --ink:#15202c; --muted:#5a6676; --line:#d2d9e1;
+  --acc:#c8460d; --acc-soft:#fdeee4; --acc2:#0a6f80; --acc2-soft:#e1f3f6;
+  --good:#2b7a3b; --good-soft:#e5f4e8; --bad:#b8282a; --bad-soft:#fbe7e7;
+  --fd:'Barlow Condensed','Arial Narrow',sans-serif; --fb:'IBM Plex Sans',system-ui,sans-serif; --fm:'IBM Plex Mono',ui-monospace,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f141a; --surface:#18212b; --ink:#e4ebf2; --muted:#94a2b2; --line:#2b3947;
+    --acc:#ff8b4d; --acc-soft:#3a2416; --acc2:#45c6d8; --acc2-soft:#13303a;
+    --good:#5cc36f; --good-soft:#163020; --bad:#ff7070; --bad-soft:#3a1a1c; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f141a; --surface:#18212b; --ink:#e4ebf2; --muted:#94a2b2; --line:#2b3947;
+  --acc:#ff8b4d; --acc-soft:#3a2416; --acc2:#45c6d8; --acc2-soft:#13303a;
+  --good:#5cc36f; --good-soft:#163020; --bad:#ff7070; --bad-soft:#3a1a1c; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.55 var(--fb)}
+a{color:var(--acc2)}
+.top{position:sticky;top:0;z-index:10;background:var(--surface);border-bottom:1px solid var(--line)}
+.top-in{max-width:1120px;margin:0 auto;padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center}
+.brand{font-family:var(--fd);font-weight:700;font-size:23px;letter-spacing:.01em;white-space:nowrap}
+.brand span{color:var(--acc)}
+nav.tabs{display:flex;gap:4px;flex-wrap:wrap}
+nav.tabs a{padding:6px 11px;border-radius:6px;color:var(--muted);text-decoration:none;font-weight:600;font-size:14px}
+nav.tabs a:hover{background:var(--bg);color:var(--ink)}
+nav.tabs a.on{background:var(--ink);color:var(--surface)}
+main{max-width:1120px;margin:0 auto;padding:22px 16px 90px}
+.view{display:none}.view.on{display:block}
+h1,h2,h3,h4{font-family:var(--fd);text-wrap:balance;line-height:1.15;margin:0}
+h2{font-size:32px}
+h3{font-size:23px;margin-top:4px}
+h4{font-size:18px;margin:14px 0 6px}
+p{margin:6px 0}
+.lead{color:var(--muted);max-width:72ch;margin:6px 0 16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px}
+.stack{display:grid;gap:16px}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px}
+ul.tight{margin:6px 0;padding-left:20px}
+ul.tight li{margin:3px 0}
+.hook{background:var(--acc-soft);border-left:4px solid var(--acc);padding:9px 13px;border-radius:6px;margin:12px 0 4px}
+.hook b{color:var(--acc)}
+.next{color:var(--muted);font-size:14px;margin-top:10px}
+.next b{color:var(--acc2)}
+.oneline{font-size:17px;font-weight:500;margin:6px 0 10px}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:2px 8px;border-radius:99px;background:var(--acc2-soft);color:var(--acc2);margin-right:4px}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{border-bottom:1px solid var(--line);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--bg);font-weight:600}
+td:first-child{font-weight:500}
+code,.mono{font-family:var(--fm);font-size:.92em}
+.ov{text-decoration:overline}
+figure{margin:12px 0 4px}
+figure svg{width:100%;height:auto;display:block}
+figcaption{font-size:13px;color:var(--muted);margin-top:6px}
+svg .bx{fill:var(--surface);stroke:var(--muted);stroke-width:1.3}
+svg .bxa{fill:var(--acc-soft);stroke:var(--acc);stroke-width:2}
+svg .bxt{fill:var(--acc2-soft);stroke:var(--acc2);stroke-width:1.5}
+svg .bxg{fill:var(--bg);stroke:var(--muted);stroke-width:1.2}
+svg .ln{stroke:var(--muted);stroke-width:1.4;fill:none}
+svg .lnd{stroke:var(--muted);stroke-width:1.2;fill:none;stroke-dasharray:4 4}
+svg .lna{stroke:var(--acc);stroke-width:2.4;fill:none}
+svg .bus{stroke:var(--acc2);stroke-width:7;fill:none;stroke-linecap:round;opacity:.55}
+svg .wave{stroke:var(--ink);stroke-width:1.6;fill:none}
+svg .wavea{stroke:var(--acc);stroke-width:2;fill:none}
+svg text{fill:var(--ink);font-family:var(--fb);font-size:13px}
+svg .ts{font-size:11.5px;fill:var(--muted)}
+svg .tb{font-weight:600}
+svg .tm{font-family:var(--fm);font-size:12px}
+svg .ta{fill:var(--acc);font-weight:600}
+svg .dot{fill:var(--ink)}
+.arh{fill:var(--muted)} .arha{fill:var(--acc)}
+/* chain */
+.chainbar{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:8px 0 18px}
+.chainbar button{font:600 13px var(--fb);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:7px 10px;cursor:pointer}
+.chainbar button:hover{border-color:var(--acc);color:var(--acc)}
+.chainbar .arrow{color:var(--muted)}
+.chainbar button b{color:var(--acc);margin-right:4px}
+.step{display:grid;grid-template-columns:54px 1fr;gap:14px;margin-top:20px;scroll-margin-top:80px}
+.step-num{font-family:var(--fd);font-size:44px;color:var(--acc);font-weight:700;line-height:1;text-align:right}
+@media (max-width:560px){.step{grid-template-columns:1fr}.step-num{text-align:left}}
+.focus{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:10px}
+.focus div{border:1px solid var(--line);border-top:4px solid var(--acc);border-radius:8px;padding:10px 12px;background:var(--surface)}
+.focus b{display:block;font-family:var(--fd);font-size:19px}
+.focus span{font-size:13px;color:var(--muted)}
+/* equations */
+.eq{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.eq .f{font-family:var(--fm);font-size:16px;font-weight:600;background:var(--acc2-soft);color:var(--ink);padding:8px 10px;border-radius:6px}
+.eq .ex{font-size:14px;border-left:3px solid var(--acc);padding-left:9px}
+.eq .k{font-size:12px;font-weight:700;color:var(--acc);text-transform:uppercase;letter-spacing:.06em}
+.eq h4{margin:0}
+/* chips / buttons / forms */
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 16px}
+.chip{font:600 13px var(--fb);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:99px;padding:5px 12px;cursor:pointer}
+.chip.on,.chip:hover{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.btn{font:600 14px var(--fb);border:1px solid var(--acc);background:var(--acc);color:#fff;border-radius:7px;padding:7px 13px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--acc)}
+.btn:hover{filter:brightness(1.08)}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,summary:focus-visible{outline:3px solid var(--acc2);outline-offset:2px}
+.form{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:flex-end;margin:8px 0}
+.form label{display:flex;flex-direction:column;font-size:12px;font-weight:600;color:var(--muted);gap:3px}
+.form input,.form select{font:500 14px var(--fm);padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);width:110px}
+.form select{width:auto}
+.out{font-family:var(--fm);background:var(--bg);border-radius:8px;padding:10px 12px;font-size:14px;margin-top:8px;white-space:pre-wrap;line-height:1.6}
+.out .hi{color:var(--acc);font-weight:600}
+.ok{color:var(--good);font-weight:600}.no{color:var(--bad);font-weight:600}
+/* hex grid */
+.hexgrid{display:grid;grid-template-columns:90px repeat(5,38px);gap:4px;font-family:var(--fm);margin-top:8px;align-items:center}
+.hexgrid .c{height:34px;border:1px solid var(--line);border-radius:5px;display:flex;align-items:center;justify-content:center;font-weight:600;background:var(--surface)}
+.hexgrid .c.e{border-style:dashed;color:var(--muted);background:transparent}
+.hexgrid .c.z{background:var(--acc-soft);border-color:var(--acc);color:var(--acc)}
+.hexgrid .c.r{background:var(--acc2-soft);border-color:var(--acc2)}
+.hexgrid .l{font-size:12px;color:var(--muted);font-weight:600}
+/* flags */
+.flags{display:grid;grid-template-columns:repeat(16,minmax(30px,1fr));gap:3px;font-family:var(--fm);font-size:12px;text-align:center;min-width:560px}
+.flags div{border:1px solid var(--line);border-radius:4px;padding:4px 0}
+.flags .n{color:var(--muted);border:none;padding:0}
+.flags .s{background:var(--acc-soft);border-color:var(--acc);font-weight:600}
+.flags .k{background:var(--acc2-soft);border-color:var(--acc2);font-weight:600}
+/* questions */
+details.q{background:var(--surface);border:1px solid var(--line);border-radius:8px;margin:7px 0}
+details.q summary{cursor:pointer;padding:10px 14px;font-weight:500;list-style:none;display:flex;gap:10px}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary .qn{font-family:var(--fm);font-size:12px;color:var(--acc);font-weight:600;min-width:44px;padding-top:2px}
+details.q[open] summary{border-bottom:1px dashed var(--line)}
+details.q .ans{padding:10px 14px 12px 68px;font-size:14.5px}
+details.q .idea{color:var(--acc2);font-weight:600}
+@media (max-width:560px){details.q .ans{padding-left:14px}}
+.qgroup h3{margin-top:22px}
+.qsrc{font-size:13px;color:var(--muted)}
+/* pipeline grid */
+.pipe{display:grid;gap:4px;font-family:var(--fm);font-size:13px;min-width:560px}
+.pipe div{border:1px solid var(--line);border-radius:5px;padding:6px 4px;text-align:center;background:var(--surface)}
+.pipe .h{border:none;background:none;color:var(--muted);font-weight:600}
+.pipe .f{background:var(--acc2-soft);border-color:var(--acc2)}
+.pipe .e{background:var(--acc-soft);border-color:var(--acc)}
+.pipe .x{background:var(--bad-soft);border-color:var(--bad);color:var(--bad);text-decoration:line-through}
+.pipe .b{background:repeating-linear-gradient(45deg,var(--bg),var(--bg) 4px,var(--surface) 4px,var(--surface) 8px);color:var(--muted)}
+/* stack */
+.stk{font-family:var(--fm);font-size:13px;border-collapse:collapse;min-width:420px}
+.stk td{padding:5px 9px;border-bottom:1px solid var(--line)}
+.stk tr.top td{background:var(--acc-soft);font-weight:600}
+/* quiz + cards */
+.quiz .opt{display:block;width:100%;text-align:left;font:500 14px var(--fb);border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:6px;padding:7px 10px;margin:5px 0;cursor:pointer}
+.quiz .opt.right{background:var(--good-soft);border-color:var(--good)}
+.quiz .opt.wrong{background:var(--bad-soft);border-color:var(--bad)}
+.quiz .why{font-size:14px;color:var(--muted);margin-top:4px}
+.score{font-family:var(--fd);font-size:22px;color:var(--acc)}
+.fc{perspective:900px;min-height:150px;cursor:pointer}
+.fc-in{position:relative;width:100%;min-height:150px;transition:transform .45s;transform-style:preserve-3d}
+.fc.flip .fc-in{transform:rotateY(180deg)}
+.fc-f,.fc-b{position:absolute;inset:0;backface-visibility:hidden;border-radius:10px;padding:14px;display:flex;align-items:center;justify-content:center;text-align:center;border:1px solid var(--line)}
+.fc-f{background:var(--surface);font-family:var(--fd);font-size:21px;font-weight:600}
+.fc-b{background:var(--acc2-soft);transform:rotateY(180deg);font-size:14px}
+@media (prefers-reduced-motion: reduce){.fc-in{transition:none}}
+.sub{font-size:13px;color:var(--muted)}
+.cmpnav{position:sticky;top:58px;background:var(--bg);padding:6px 0;z-index:3}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:4px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arh" d="M0 0L10 5L0 10z"/></marker>
+    <marker id="ara" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arha" d="M0 0L10 5L0 10z"/></marker>
+  </defs>
+</svg>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">ECE-311 <span>Study Map</span></div>
+    <nav class="tabs" aria-label="Sections">
+      <a href="#chain">1 · Chain</a>
+      <a href="#equations">2 · Equations</a>
+      <a href="#compare">3 · Comparisons</a>
+      <a href="#circuits">4 · Circuits &amp; timing</a>
+      <a href="#questions">5 · Solved questions</a>
+      <a href="#practice">6 · Practice</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<!-- ========================= CHAIN ========================= -->
+<section class="view" id="v-chain">
+  <h2>The course as one chain</h2>
+  <p class="lead">Ten links, each building on the one before. Read a link, look at its picture, memorize the orange hook, move on. Click any link to jump to it.</p>
+  <div class="chainbar" id="chainbar"></div>
+
+  <div class="card">
+    <h3>What the exams keep asking</h3>
+    <p class="sub">Both midterm papers in the course files are almost identical, so these four types are the safest bet.</p>
+    <div class="focus">
+      <div><b>MCQ bank</b><span>About half the marks. All answers in Solved questions → Exam.</span></div>
+      <div><b>74LS138 decoding</b><span>Memory-map table + circuit. Live solver in Circuits.</span></div>
+      <div><b>Execute a MOV</b><span>EA, PA, one byte per cell. Calculator in Practice.</span></div>
+      <div><b>Stack + addresses</b><span>CS:IP, SS:SP, after an interrupt. Simulator in Practice.</span></div>
+    </div>
+  </div>
+
+  <!-- STEP 1 -->
+  <div class="step" id="s1"><div class="step-num">1</div><div class="card">
+    <span class="tag">Basics</span>
+    <h3>From computer to microprocessor</h3>
+    <p class="oneline">A microprocessor is a CPU on one chip. Add memory and I/O and it becomes a microcomputer.</p>
+    <div class="grid2">
+      <div>
+        <ul class="tight">
+          <li><b>Computer vs calculator:</b> the computer runs a <b>stored program</b>; the calculator waits for each key.</li>
+          <li><b>Bit</b> = 0/1 · <b>Nibble</b> = 4 bits · <b>Byte</b> = 8 bits · <b>Word</b> = bits the ALU handles at once.</li>
+          <li>Integration grew SSI → MSI → LSI → VLSI → SLSI until a whole CPU fitted on one chip.</li>
+          <li><b>Moore's Law (1965):</b> transistors per chip double every 18–24 months.</li>
+          <li><b>Intel 4004 (15 Nov 1971):</b> first commercial µP. 4-bit, 2,300 transistors, 108 kHz, 10 µm. Built for the Busicom calculator: MCS-4 = 4004 CPU + ROM + RAM + shift register (I/O).</li>
+          <li><b>8086 (1978):</b> 16-bit data, 20-bit address, 29,000 transistors. <b>8088 (1979):</b> same inside, 8-bit external bus (IBM PC, 1981). <b>8051 (1980):</b> microcontroller.</li>
+        </ul>
+      </div>
+      <figure>
+        <svg viewBox="0 0 640 260" role="img" aria-label="Microcomputer: input, microprocessor, memory, output">
+          <rect class="bx" x="20" y="70" width="110" height="52" rx="8"/><text x="75" y="93" text-anchor="middle" class="tb">Input</text><text x="75" y="111" text-anchor="middle" class="ts">keyboard, sensor</text>
+          <rect class="bxa" x="180" y="30" width="260" height="122" rx="8"/><text x="310" y="52" text-anchor="middle" class="tb">Microprocessor (CPU)</text>
+          <rect class="bx" x="194" y="72" width="70" height="62" rx="6"/><text x="229" y="107" text-anchor="middle">ALU</text>
+          <rect class="bx" x="272" y="72" width="80" height="62" rx="6"/><text x="312" y="100" text-anchor="middle">Control</text><text x="312" y="116" text-anchor="middle">unit</text>
+          <rect class="bx" x="360" y="72" width="68" height="62" rx="6"/><text x="394" y="100" text-anchor="middle">Regis-</text><text x="394" y="116" text-anchor="middle">ters</text>
+          <rect class="bx" x="490" y="70" width="130" height="52" rx="8"/><text x="555" y="93" text-anchor="middle" class="tb">Output</text><text x="555" y="111" text-anchor="middle" class="ts">LCD, printer, motor</text>
+          <rect class="bx" x="230" y="196" width="160" height="52" rx="8"/><text x="310" y="219" text-anchor="middle" class="tb">Memory</text><text x="310" y="237" text-anchor="middle" class="ts">program + data</text>
+          <path class="ln" d="M130 96H178" marker-end="url(#ar)"/><path class="ln" d="M440 96H488" marker-end="url(#ar)"/><path class="ln" d="M310 154V194" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        </svg>
+        <figcaption>Microcomputer = the orange box (microprocessor) + memory + I/O.</figcaption>
+      </figure>
+    </div>
+    <h4>Three kinds of chips</h4>
+    <div class="tw"><table><tr><th></th><th>Standard chips</th><th>PLDs (FPGA, CPLD, SPLD)</th><th>ASICs</th></tr>
+    <tr><td>Function set by</td><td>Factory, fixed</td><td>User, after manufacture</td><td>Designer, before fabrication</td></tr>
+    <tr><td>Size</td><td>&lt; 100 transistors</td><td>Grid of logic blocks + programmable switches</td><td>Large, custom</td></tr>
+    <tr><td>Example</td><td>7400 series</td><td>FPGA</td><td>Chip for one product</td></tr></table></div>
+    <div class="hook"><b>Hook:</b> microprocessor = brain · microcomputer = brain + body · microcontroller = small brain with the body built in.</div>
+    <p class="next">Next link → <b>how the brain talks to memory</b> (two architectures).</p>
+  </div></div>
+
+  <!-- STEP 2 -->
+  <div class="step" id="s2"><div class="step-num">2</div><div class="card">
+    <span class="tag">Architecture models</span>
+    <h3>Von Neumann vs Harvard</h3>
+    <p class="oneline">Do instructions and data share one road or travel on two roads?</p>
+    <figure>
+      <svg viewBox="0 0 680 240" role="img" aria-label="Von Neumann uses one memory and one bus; Harvard uses two memories and two buses">
+        <text x="170" y="18" text-anchor="middle" class="tb">Von Neumann (8086)</text>
+        <text x="510" y="18" text-anchor="middle" class="tb">Harvard (8051)</text>
+        <line x1="340" y1="8" x2="340" y2="232" class="lnd"/>
+        <rect class="bxa" x="110" y="32" width="120" height="46" rx="8"/><text x="170" y="60" text-anchor="middle" class="tb">CPU</text>
+        <rect class="bx" x="70" y="160" width="200" height="58" rx="8"/><text x="170" y="185" text-anchor="middle" class="tb">One memory</text><text x="170" y="203" text-anchor="middle" class="ts">instructions + data</text>
+        <path class="ln" d="M170 80V158" marker-start="url(#ar)" marker-end="url(#ar)"/><text x="180" y="124" class="ts">one shared bus = bottleneck</text>
+        <rect class="bxa" x="450" y="32" width="120" height="46" rx="8"/><text x="510" y="60" text-anchor="middle" class="tb">CPU</text>
+        <rect class="bx" x="360" y="160" width="140" height="58" rx="8"/><text x="430" y="185" text-anchor="middle" class="tb">Program memory</text><text x="430" y="203" text-anchor="middle" class="ts">instructions</text>
+        <rect class="bx" x="520" y="160" width="140" height="58" rx="8"/><text x="590" y="185" text-anchor="middle" class="tb">Data memory</text><text x="590" y="203" text-anchor="middle" class="ts">variables, stack</text>
+        <path class="ln" d="M485 80L440 158" marker-end="url(#ar)"/><path class="ln" d="M535 80L580 158" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <text x="380" y="124" class="ts">code bus</text><text x="575" y="124" class="ts">data bus</text>
+      </svg>
+      <figcaption>Harvard can fetch an instruction and read data in the same clock cycle; Von Neumann cannot.</figcaption>
+    </figure>
+    <ul class="tight">
+      <li><b>Von Neumann bottleneck:</b> code and data compete for one memory path, so memory bandwidth limits speed.</li>
+      <li><b>Modified Harvard:</b> one unified memory for software, but separate instruction and data caches inside the CPU (modern x86, ARM).</li>
+      <li><b>Architecture vs organization:</b> architecture = what the programmer sees (instruction set, registers, addressing modes). Organization = how hardware builds it (bus widths, control signals, timing). <i>8086 and 8088: same architecture, different organization (16-bit vs 8-bit external data bus).</i></li>
+    </ul>
+    <div class="hook"><b>Hook:</b> one road vs two roads. And never mix the axes: VN/Harvard is about <b>memory</b>, RISC/CISC is about <b>instructions</b>. 8086 = VN + CISC · 8051 = Harvard + CISC.</div>
+    <p class="next">Next link → <b>what happens inside the CPU</b>.</p>
+  </div></div>
+
+  <!-- STEP 3 -->
+  <div class="step" id="s3"><div class="step-num">3</div><div class="card">
+    <span class="tag">Inside the CPU</span>
+    <h3>ALU, control unit, registers, and the fetch path</h3>
+    <p class="oneline">The control unit coordinates, the ALU calculates, the registers hold values. Every instruction goes Fetch → Decode → Execute → Store.</p>
+    <div class="grid2">
+      <div>
+        <ul class="tight">
+          <li><b>ALU:</b> add, subtract, compare, AND/OR/XOR/NOT, shift; sets flags Z, C, S, O.</li>
+          <li><b>Control unit:</b> fetches, decodes, generates control signals (register enables, ALU select, memory/I-O read-write). <i>Coordinator, not calculator.</i></li>
+          <li><b>PC</b> next instruction address (8086: IP) · <b>IR</b> instruction being decoded · <b>MAR</b> address sent to memory · <b>MDR/MBR</b> data from/to memory · <b>SP</b> top of stack · <b>Flags</b> status.</li>
+          <li><b>Clock:</b> T = 1/f. One instruction cycle = several machine (bus) cycles = many T-states.</li>
+        </ul>
+        <div class="out" id="fetch-txt" aria-live="polite"></div>
+        <p style="margin-top:8px"><button class="btn" id="fetch-next">Next step ▸</button> <button class="btn ghost" id="fetch-reset">Restart</button></p>
+      </div>
+      <figure>
+        <svg viewBox="0 0 640 250" role="img" aria-label="Instruction fetch path from PC through MAR to memory and back through MDR to IR">
+          <rect class="bxg" x="10" y="10" width="410" height="230" rx="10"/><text x="22" y="30" class="ts">CPU</text>
+          <rect id="f-pc" class="bx" x="30" y="44" width="100" height="40" rx="6"/><text x="80" y="69" text-anchor="middle" class="tb">PC</text>
+          <rect class="bx" x="260" y="44" width="120" height="40" rx="6"/><text x="320" y="69" text-anchor="middle" class="tb">MAR</text>
+          <rect class="bx" x="150" y="100" width="100" height="40" rx="6"/><text x="200" y="125" text-anchor="middle" class="tb">Control unit</text>
+          <rect class="bx" x="30" y="160" width="100" height="40" rx="6"/><text x="80" y="185" text-anchor="middle" class="tb">IR</text>
+          <rect id="f-mdr" class="bx" x="260" y="160" width="120" height="40" rx="6"/><text x="320" y="185" text-anchor="middle" class="tb">MDR</text>
+          <rect class="bx" x="480" y="44" width="140" height="156" rx="8"/><text x="550" y="118" text-anchor="middle" class="tb">Memory</text><text x="550" y="136" text-anchor="middle" class="ts">program</text>
+          <path id="f-a1" class="ln" d="M130 64H258" marker-end="url(#ar)"/>
+          <path id="f-a2" class="ln" d="M380 64H478" marker-end="url(#ar)"/><text x="430" y="56" text-anchor="middle" class="ts">address</text>
+          <path id="f-a3" class="ln" d="M250 120H478" marker-end="url(#ar)"/><text x="440" y="112" text-anchor="middle" class="ts">RD</text>
+          <path id="f-a4" class="ln" d="M478 180H382" marker-end="url(#ar)"/><text x="430" y="172" text-anchor="middle" class="ts">data</text>
+          <path id="f-a5" class="ln" d="M258 180H132" marker-end="url(#ar)"/>
+          <path id="f-a6" class="ln" d="M80 158V120H148" marker-end="url(#ar)"/><text x="88" y="140" class="ts">decode</text>
+          <path id="f-a7" class="ln" d="M30 54H18V36H70V42" marker-end="url(#ar)"/><text x="76" y="30" class="ts">PC + length</text>
+        </svg>
+        <figcaption>Press “Next step” to walk the 8 fetch steps. The orange arrow is the step in progress.</figcaption>
+      </figure>
+    </div>
+    <div class="hook"><b>Hook:</b> PC <b>points</b>, MAR <b>asks</b>, MDR <b>receives</b>, IR <b>holds</b>, CU <b>decodes</b>.</div>
+    <p class="next">Next link → <b>memory and the buses</b> that carry those signals.</p>
+  </div></div>
+
+  <!-- STEP 4 -->
+  <div class="step" id="s4"><div class="step-num">4</div><div class="card">
+    <span class="tag">Memory &amp; buses</span>
+    <h3>Memory hierarchy, RAM/ROM, buses, tri-state, stack</h3>
+    <p class="oneline">Three buses join everything: address says <b>where</b>, data carries <b>what</b>, control says <b>when and which operation</b>.</p>
+    <div class="grid2">
+      <figure>
+        <svg viewBox="0 0 520 210" role="img" aria-label="Memory hierarchy: registers, cache, main memory, secondary storage">
+          <rect class="bxa" x="200" y="14" width="120" height="38" rx="5"/><text x="260" y="38" text-anchor="middle" class="tb">Registers</text>
+          <rect class="bxt" x="150" y="60" width="220" height="38" rx="5"/><text x="260" y="84" text-anchor="middle" class="tb">Cache (SRAM)</text>
+          <rect class="bx" x="100" y="106" width="320" height="38" rx="5"/><text x="260" y="130" text-anchor="middle" class="tb">Main memory (DRAM, ROM)</text>
+          <rect class="bxg" x="50" y="152" width="420" height="38" rx="5"/><text x="260" y="176" text-anchor="middle" class="tb">Secondary storage (disk, flash)</text>
+          <path class="ln" d="M30 190V20" marker-end="url(#ar)"/><text x="40" y="30" class="ts">faster</text>
+          <path class="ln" d="M490 20V190" marker-end="url(#ar)"/><text x="482" y="186" text-anchor="end" class="ts">bigger</text>
+        </svg>
+        <figcaption>The CPU checks cache first. The 8086 and 8051 have no cache.</figcaption>
+      </figure>
+      <div>
+        <ul class="tight">
+          <li><b>RAM</b> read/write, volatile: variables, stack. SRAM = flip-flops, fast, no refresh (cache). DRAM = capacitors, dense, needs refresh (main memory).</li>
+          <li><b>ROM</b> non-volatile: boot code, firmware. Mask ROM → PROM (once) → EPROM (UV erase) → EEPROM/Flash (electrical erase).</li>
+          <li><b>Address bus:</b> one-way out of CPU; N lines → 2<sup>N</sup> locations. 8086: A0–A19.</li>
+          <li><b>Data bus:</b> two-way; width = bits per transfer. 8086: D0–D15.</li>
+          <li><b>Control bus:</b> RD, WR, M/<span class="ov">IO</span>, READY, INTR…</li>
+          <li><b>Stack:</b> LIFO. PUSH saves, POP restores; CALL saves the return address, RET restores it.</li>
+        </ul>
+      </div>
+    </div>
+    <figure>
+      <svg viewBox="0 0 690 280" role="img" aria-label="System bus: microprocessor with address bus, data bus and four control lines to ROM, RAM, keyboard and printer">
+        <rect class="bxa" x="10" y="36" width="80" height="180" rx="8"/><text x="50" y="130" text-anchor="middle" class="tb">µP</text>
+        <path class="bus" d="M90 60H680"/><text x="98" y="52" class="ts">Address bus (one-way)</text>
+        <path class="bus" d="M90 96H680"/><text x="98" y="88" class="ts">Data bus (two-way)</text>
+        <path class="ln" d="M90 128H680"/><text x="98" y="124" class="ts tm">MRDC</text>
+        <path class="ln" d="M90 150H680"/><text x="98" y="146" class="ts tm">MWTC</text>
+        <path class="ln" d="M90 172H680"/><text x="98" y="168" class="ts tm">IORC</text>
+        <path class="ln" d="M90 194H680"/><text x="98" y="190" class="ts tm">IOWC</text>
+        <g>
+          <rect class="bx" x="230" y="222" width="100" height="44" rx="6"/><text x="280" y="249" text-anchor="middle" class="tb">ROM</text>
+          <path class="ln" d="M245 222V60M265 222V96M285 222V128"/><circle class="dot" cx="245" cy="60" r="3.5"/><circle class="dot" cx="265" cy="96" r="3.5"/><circle class="dot" cx="285" cy="128" r="3.5"/>
+        </g>
+        <g>
+          <rect class="bx" x="345" y="222" width="100" height="44" rx="6"/><text x="395" y="249" text-anchor="middle" class="tb">RAM</text>
+          <path class="ln" d="M360 222V60M380 222V96M400 222V128M420 222V150"/><circle class="dot" cx="360" cy="60" r="3.5"/><circle class="dot" cx="380" cy="96" r="3.5"/><circle class="dot" cx="400" cy="128" r="3.5"/><circle class="dot" cx="420" cy="150" r="3.5"/>
+        </g>
+        <g>
+          <rect class="bx" x="460" y="222" width="100" height="44" rx="6"/><text x="510" y="249" text-anchor="middle" class="tb">Keyboard</text>
+          <path class="ln" d="M475 222V60M495 222V96M515 222V172"/><circle class="dot" cx="475" cy="60" r="3.5"/><circle class="dot" cx="495" cy="96" r="3.5"/><circle class="dot" cx="515" cy="172" r="3.5"/>
+        </g>
+        <g>
+          <rect class="bx" x="575" y="222" width="100" height="44" rx="6"/><text x="625" y="249" text-anchor="middle" class="tb">Printer</text>
+          <path class="ln" d="M590 222V60M610 222V96M630 222V194"/><circle class="dot" cx="590" cy="60" r="3.5"/><circle class="dot" cx="610" cy="96" r="3.5"/><circle class="dot" cx="630" cy="194" r="3.5"/>
+        </g>
+      </svg>
+      <figcaption>Dots are connections. ROM: MRDC only · RAM: MRDC + MWTC · Keyboard (input): IORC · Printer (output): IOWC. (Tutorial 1, D3)</figcaption>
+    </figure>
+    <div class="grid2">
+      <figure>
+        <svg viewBox="0 0 320 130" role="img" aria-label="Tri-state buffer with input, output and enable">
+          <path class="ln" d="M20 60H70"/><polygon points="70,25 70,95 130,60" class="bxa"/><path class="ln" d="M130 60H200"/>
+          <path class="ln" d="M100 120V78"/><text x="16" y="52" class="ts">Input</text><text x="150" y="52" class="ts">to shared bus</text><text x="108" y="124" class="ts">Enable (OE)</text>
+          <text x="214" y="40" class="tm">EN In Out</text><text x="214" y="62" class="tm">1   0   0</text><text x="214" y="82" class="tm">1   1   1</text><text x="214" y="102" class="tm ta">0   X   Z</text>
+        </svg>
+        <figcaption>Z = high impedance = electrically disconnected.</figcaption>
+      </figure>
+      <div>
+        <p><b>Why tri-state?</b> Many devices share one data bus. Only the selected device drives it; all others sit in Z.</p>
+        <p><b>Bus contention</b> = two devices drive the same line (one 1, one 0): wrong value, large current, heat, possible damage. Prevented by the address decoder (one <span class="ov">CS</span> at a time) and OE only during that device's read.</p>
+      </div>
+    </div>
+    <div class="hook"><b>Hook:</b> Address = <b>where</b> (one-way out) · Data = <b>what</b> (both ways) · Control = <b>when</b>. Only one talker on the bus; the rest are in Z.</div>
+    <p class="next">Next link → <b>how we tell the CPU what to do</b> (the programming system).</p>
+  </div></div>
+
+  <!-- STEP 5 -->
+  <div class="step" id="s5"><div class="step-num">5</div><div class="card">
+    <span class="tag">Programming system</span>
+    <h3>Instruction format, addressing modes, RISC/CISC, languages</h3>
+    <p class="oneline">An instruction = opcode (what to do) + operands (on what). Addressing modes are the rules for finding the operand.</p>
+    <figure>
+      <svg viewBox="0 0 700 92" role="img" aria-label="Translation chain from C to machine code">
+        <rect class="bx" x="6" y="22" width="104" height="46" rx="7"/><text x="58" y="44" text-anchor="middle" class="tb">C code</text><text x="58" y="60" text-anchor="middle" class="ts tm">sum=a+b;</text>
+        <rect class="bxt" x="148" y="22" width="96" height="46" rx="7"/><text x="196" y="50" text-anchor="middle" class="tb">Compiler</text>
+        <rect class="bx" x="282" y="22" width="124" height="46" rx="7"/><text x="344" y="44" text-anchor="middle" class="tb">Assembly</text><text x="344" y="60" text-anchor="middle" class="ts tm">MOV AL, 05H</text>
+        <rect class="bxt" x="444" y="22" width="96" height="46" rx="7"/><text x="492" y="50" text-anchor="middle" class="tb">Assembler</text>
+        <rect class="bxa" x="578" y="22" width="114" height="46" rx="7"/><text x="635" y="44" text-anchor="middle" class="tb">Machine code</text><text x="635" y="60" text-anchor="middle" class="ts tm">B0 05</text>
+        <path class="ln" d="M110 45H146" marker-end="url(#ar)"/><path class="ln" d="M244 45H280" marker-end="url(#ar)"/><path class="ln" d="M406 45H442" marker-end="url(#ar)"/><path class="ln" d="M540 45H576" marker-end="url(#ar)"/>
+        <text x="196" y="86" text-anchor="middle" class="ts">1 line → many instr.</text><text x="492" y="86" text-anchor="middle" class="ts">1 line → 1 instr.</text>
+      </svg>
+    </figure>
+    <div class="grid2">
+      <div>
+        <h4>Five instruction groups (Assignment 1, Q6)</h4>
+        <ol class="tight"><li>Data transfer: MOV, PUSH, POP, IN, OUT</li><li>Arithmetic: ADD, SUB, INC, DEC, MUL, DIV</li><li>Logical: AND, OR, XOR, NOT, shift, rotate</li><li>Branch: JMP, JNZ, CALL, RET</li><li>Machine control: NOP, HLT, STC, CLI</li></ol>
+        <p class="sub">8086 also has string instructions (MOVSB); 8051 has bit instructions (SETB, JB) and no HLT.</p>
+      </div>
+      <div>
+        <h4>Machine code decoded: MOV AL, 05H = B0 05</h4>
+        <p class="mono">1011 · 0 · 000 · 0000 0101</p>
+        <p class="sub">1011 = move immediate to register · w = 0 byte · reg 000 = AL · data = 05H. 8051 equivalent MOV A,#05H = 74 05.</p>
+        <h4>Directives (for the assembler, never executed)</h4>
+        <p class="sub">ORG (start address) · DB byte · DW word · DD doubleword · EQU constant · END · MASM: SEGMENT, ENDS, ASSUME.</p>
+      </div>
+    </div>
+    <h4>General addressing modes</h4>
+    <div class="tw"><table><tr><th>Mode</th><th>Operand is…</th><th>8086</th><th>8051</th></tr>
+    <tr><td>Immediate</td><td>inside the instruction</td><td>MOV AX, 0025H</td><td>MOV A, #25H</td></tr>
+    <tr><td>Register</td><td>in a register</td><td>MOV AX, BX</td><td>MOV A, R1</td></tr>
+    <tr><td>Direct</td><td>at the address written in the instruction</td><td>MOV AX, [2345H]</td><td>MOV A, 30H</td></tr>
+    <tr><td>Register indirect</td><td>at the address held in a register</td><td>MOV AL, [BX]</td><td>MOV A, @R0</td></tr>
+    <tr><td>Indexed</td><td>base address + index register</td><td>MOV AL, [SI+10H]</td><td>MOVC A, @A+DPTR</td></tr>
+    <tr><td>Base + displacement</td><td>base register + constant</td><td>MOV AX, [BX+4]</td><td>—</td></tr>
+    <tr><td>Base + index (+ disp)</td><td>base + index + constant</td><td>MOV [BX+DI+4], AL</td><td>—</td></tr></table></div>
+    <div class="hook"><b>Hook:</b> CISC = “one instruction does a lot” (8086: MOV AX,[BX+DI+4] computes, reads memory and moves). RISC = “only LOAD/STORE touch memory, everything else register-to-register”.</div>
+    <p class="next">Next link → <b>building a whole system</b> around the CPU.</p>
+  </div></div>
+
+  <!-- STEP 6 -->
+  <div class="step" id="s6"><div class="step-num">6</div><div class="card">
+    <span class="tag">Microprocessor system</span>
+    <h3>Decoding, I/O, transfer schemes, cache, pipelining</h3>
+    <p class="oneline">A microprocessor needs external ROM, RAM, I/O, clock, reset, and an address decoder that picks one chip at a time.</p>
+    <div class="grid2">
+      <div>
+        <h4>Address decoding</h4>
+        <p>Upper address bits → decoder → exactly one <span class="ov">CS</span>. Lower bits → every chip, to pick the location inside it.</p>
+        <div class="tw"><table><tr><th>A15 A14</th><th>Chip</th><th>Range</th></tr><tr><td>0 0</td><td>ROM</td><td class="mono">0000–3FFFH</td></tr><tr><td>0 1</td><td>RAM</td><td class="mono">4000–7FFFH</td></tr><tr><td>1 0</td><td>I/O</td><td class="mono">8000–BFFFH</td></tr><tr><td>1 1</td><td>none</td><td class="mono">C000–FFFFH</td></tr></table></div>
+        <p class="sub">4A10H → A15A14 = 01 → RAM. Full exam version: Circuits → 74LS138.</p>
+        <h4>I/O mapping</h4>
+        <p><b>I/O-mapped:</b> separate port space, IN/OUT, uses M/<span class="ov">IO</span>, no memory lost (8086: 64K ports). <b>Memory-mapped:</b> devices sit in the memory map, any MOV works, uses up memory addresses (8051 SFRs, MOVX).</p>
+      </div>
+      <div>
+        <h4>Data transfer schemes (Assignment 2)</h4>
+        <ol class="tight">
+          <li><b>Programmed I/O</b> — CPU runs the transfer:
+            <ul class="tight"><li>Synchronous: device as fast as CPU.</li><li>Asynchronous / handshake (polled): CPU keeps checking a ready flag.</li><li><b>Interrupt-driven:</b> device interrupts when ready, CPU free meanwhile → best for a <b>slow</b> device.</li></ul></li>
+          <li><b>DMA:</b> DMA controller (8237) takes the bus with HOLD/HLDA and moves memory ↔ I/O <b>bypassing the CPU</b>.</li>
+        </ol>
+        <h4>Speed-ups</h4>
+        <ul class="tight"><li><b>Cache:</b> small fast memory of recently used data (locality). Hit = found; miss = go to main memory.</li><li><b>Pipelining:</b> overlap stages → more instructions finish per unit time. One instruction is not faster.</li><li><b>Prefetching:</b> fetch next bytes early (8086 queue). The queue is <b>not</b> a cache.</li><li><b>Flush:</b> a taken jump makes prefetched bytes wrong → clear queue, refill.</li></ul>
+      </div>
+    </div>
+    <p class="sub">See it moving: Circuits → Pipeline and flush. Calculators: Practice.</p>
+    <div class="hook"><b>Hook:</b> slow device → <b>interrupt</b> · bulk transfer without CPU → <b>DMA</b> · CPU waiting for memory → <b>cache, pipeline, prefetch</b>.</div>
+    <p class="next">Next link → <b>the real chip: Intel 8086</b>.</p>
+  </div></div>
+
+  <!-- STEP 7 -->
+  <div class="step" id="s7"><div class="step-num">7</div><div class="card">
+    <span class="tag">8086 architecture</span>
+    <h3>BIU + EU, registers, segmentation, flags</h3>
+    <p class="oneline">16-bit CPU, 20-bit address bus (1 MB), split into a Bus Interface Unit that fetches and an Execution Unit that executes, at the same time.</p>
+    <figure>
+      <svg viewBox="0 0 760 330" role="img" aria-label="8086 BIU and EU working in parallel">
+        <rect class="bxa" x="20" y="16" width="340" height="226" rx="10"/>
+        <text x="36" y="42" class="tb">Bus Interface Unit (BIU)</text>
+        <text x="36" y="70">Segment registers: CS, DS, SS, ES</text>
+        <text x="36" y="94">Instruction pointer: IP</text>
+        <text x="36" y="118">Address adder Σ: Seg × 10H + offset</text>
+        <text x="36" y="142">6-byte FIFO instruction queue</text>
+        <text x="36" y="166">Bus control logic</text>
+        <text x="36" y="214" class="ts">Fetches, reads/writes memory &amp; I/O, fills the queue</text>
+        <rect class="bx" x="420" y="16" width="320" height="226" rx="10"/>
+        <text x="436" y="42" class="tb">Execution Unit (EU)</text>
+        <text x="436" y="70">16-bit ALU</text>
+        <text x="436" y="94">General: AX, BX, CX, DX</text>
+        <text x="436" y="118">Pointer / index: SP, BP, SI, DI</text>
+        <text x="436" y="142">FLAGS register</text>
+        <text x="436" y="166">Instruction decoder + control</text>
+        <text x="436" y="214" class="ts">Decodes, executes, computes EA, branch decisions</text>
+        <path class="lna" d="M360 100H418" marker-end="url(#ara)"/><text x="389" y="92" text-anchor="middle" class="ts">bytes</text>
+        <path class="ln" d="M418 170H362" marker-end="url(#ar)"/><text x="389" y="162" text-anchor="middle" class="ts">EA</text>
+        <path class="ln" d="M190 244V276" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <rect class="bxg" x="20" y="278" width="720" height="40" rx="8"/><text x="380" y="303" text-anchor="middle">External bus: A0–A19 address · D0–D15 data · control</text>
+      </svg>
+      <figcaption>The clock is not inside either unit: it comes from the external 8284A.</figcaption>
+    </figure>
+    <div class="grid2">
+      <div>
+        <h4>How they cooperate (8 steps)</h4>
+        <ol class="tight"><li>BIU fetches bytes from CS:IP.</li><li>Puts them in the 6-byte queue.</li><li>EU takes bytes from the front.</li><li>EU decodes and executes.</li><li>Memory operand needed → EU computes EA, asks BIU.</li><li>BIU adds segment, runs the bus cycle, returns data.</li><li>Meanwhile BIU keeps prefetching (when ≥ 2 bytes free and bus idle; queue full → no fetch).</li><li>Taken jump → queue flushed, refill from new address.</li></ol>
+      </div>
+      <div>
+        <h4>14 registers, 16 bits each</h4>
+        <div class="tw"><table><tr><th>Group</th><th>Registers and job</th></tr>
+        <tr><td>General</td><td><b>AX</b> accumulator (MUL, DIV, IN, OUT) · <b>BX</b> base · <b>CX</b> count (LOOP, REP; CL = shift count) · <b>DX</b> data (high word of MUL/DIV, port address). Each splits into H/L bytes.</td></tr>
+        <tr><td>Segment</td><td><b>CS</b> code · <b>DS</b> data · <b>SS</b> stack · <b>ES</b> extra (string destination)</td></tr>
+        <tr><td>Pointer/index</td><td><b>SP</b> stack top · <b>BP</b> stack base · <b>SI</b> source · <b>DI</b> destination</td></tr>
+        <tr><td>Special</td><td><b>IP</b> next instruction offset · <b>FLAGS</b></td></tr></table></div>
+      </div>
+    </div>
+    <h4>Segmentation: 16-bit registers, 20-bit address</h4>
+    <div class="grid2">
+      <div>
+        <p class="mono" style="font-size:16px"><b>PA = Segment × 10H + Offset</b></p>
+        <p>× 10H = shift one hex digit left (append a 0). Each segment is a <b>64 KB</b> window; offsets run <b>0000H–FFFFH</b>; physical addresses <b>00000H–FFFFFH</b>.</p>
+        <div class="hexgrid" aria-label="1234H:0022H gives 12362H">
+          <div class="l">Segment</div><div class="c e"></div><div class="c">1</div><div class="c">2</div><div class="c">3</div><div class="c">4</div>
+          <div class="l">× 10H</div><div class="c">1</div><div class="c">2</div><div class="c">3</div><div class="c">4</div><div class="c z">0</div>
+          <div class="l">+ Offset</div><div class="c e"></div><div class="c">0</div><div class="c">0</div><div class="c">2</div><div class="c">2</div>
+          <div class="l">= PA</div><div class="c r">1</div><div class="c r">2</div><div class="c r">3</div><div class="c r">6</div><div class="c r">2</div>
+        </div>
+      </div>
+      <div>
+        <div class="tw"><table><tr><th>Use</th><th>Pair</th></tr>
+        <tr><td>Next instruction</td><td class="mono">CS:IP</td></tr><tr><td>Stack top</td><td class="mono">SS:SP</td></tr><tr><td>Stack data</td><td class="mono">SS:BP</td></tr><tr><td>General data</td><td class="mono">DS:BX</td></tr><tr><td>String source</td><td class="mono">DS:SI</td></tr><tr><td>String destination</td><td class="mono">ES:DI</td></tr><tr><td>Direct address</td><td class="mono">DS:disp</td></tr></table></div>
+      </div>
+    </div>
+    <h4>FLAGS: 16 bits, 9 used</h4>
+    <div class="tw"><div class="flags">
+      <div class="n">15</div><div class="n">14</div><div class="n">13</div><div class="n">12</div><div class="n">11</div><div class="n">10</div><div class="n">9</div><div class="n">8</div><div class="n">7</div><div class="n">6</div><div class="n">5</div><div class="n">4</div><div class="n">3</div><div class="n">2</div><div class="n">1</div><div class="n">0</div>
+      <div>–</div><div>–</div><div>–</div><div>–</div><div class="s">OF</div><div class="k">DF</div><div class="k">IF</div><div class="k">TF</div><div class="s">SF</div><div class="s">ZF</div><div>–</div><div class="s">AF</div><div>–</div><div class="s">PF</div><div>–</div><div class="s">CF</div>
+    </div></div>
+    <div class="legend"><span><i style="background:var(--acc-soft);border:1px solid var(--acc)"></i>6 status flags (set by ALU)</span><span><i style="background:var(--acc2-soft);border:1px solid var(--acc2)"></i>3 control flags (set by program)</span></div>
+    <div class="tw" style="margin-top:8px"><table><tr><th>Flag</th><th>= 1 when</th><th>Example</th></tr>
+    <tr><td>CF carry</td><td>unsigned result doesn't fit / borrow</td><td>FFH + 01H → 00H, CF = 1 · 3 − 5 → CF = 1</td></tr>
+    <tr><td>PF parity</td><td>low byte has an <b>even</b> number of 1s</td><td>03H = 0000 0011 → PF = 1</td></tr>
+    <tr><td>AF auxiliary</td><td>carry from bit 3 to bit 4 (BCD)</td><td>0FH + 01H → AF = 1</td></tr>
+    <tr><td>ZF zero</td><td>result = 0</td><td>FFFFH + 1 → ZF = 1</td></tr>
+    <tr><td>SF sign</td><td>MSB = 1 (negative)</td><td>80H → SF = 1</td></tr>
+    <tr><td>OF overflow</td><td><b>signed</b> result out of range</td><td>7FH + 01H = 80H → OF = 1, CF = 0</td></tr>
+    <tr><td>TF trap</td><td>single-step (type 1 after each instruction)</td><td>set via PUSHF/POPF</td></tr>
+    <tr><td>IF interrupt</td><td>INTR enabled (STI/CLI)</td><td>NMI ignores IF</td></tr>
+    <tr><td>DF direction</td><td>strings go backward (STD); CLD = forward</td><td>REP MOVSB</td></tr></table></div>
+    <div class="hook"><b>Hooks:</b> status flags low→high “<b>C</b>an <b>P</b>eople <b>A</b>lways <b>Z</b>ip <b>S</b>mall <b>O</b>bjects” (CF0 PF2 AF4 ZF6 SF7 OF11); control flags “<b>TID</b>” (bits 8, 9, 10). CF = unsigned, OF = signed. Address = “add a zero, then add”.</div>
+    <p class="next">Next link → <b>the pins, the two modes and the bus cycle</b>.</p>
+  </div></div>
+
+  <!-- STEP 8 -->
+  <div class="step" id="s8"><div class="step-num">8</div><div class="card">
+    <span class="tag">8086 hardware</span>
+    <h3>Pins, minimum/maximum mode, bus cycle, interrupts</h3>
+    <p class="oneline">40 pins are not enough, so address and data share AD0–AD15; ALE tells outside latches when the address is there.</p>
+    <div class="tw"><table><tr><th>Pin</th><th>What it does</th><th>Remember</th></tr>
+    <tr><td>AD15–AD0</td><td>Address in T1 (ALE = 1), data in T2–T4</td><td>multiplexed: 40-pin limit</td></tr>
+    <tr><td>A19/S6–A16/S3</td><td>High address, then status</td><td>S4 S3 = segment in use, S5 = IF</td></tr>
+    <tr><td><span class="ov">BHE</span>/S7</td><td>Enables high (odd) bank D15–D8</td><td>with A0 picks the bytes</td></tr>
+    <tr><td>ALE</td><td>Address latch enable</td><td>strobes the 8282 latches</td></tr>
+    <tr><td>M/<span class="ov">IO</span></td><td>1 memory, 0 I/O</td><td></td></tr>
+    <tr><td><span class="ov">RD</span>, <span class="ov">WR</span></td><td>Read / write strobes</td><td>active low</td></tr>
+    <tr><td>DT/<span class="ov">R</span></td><td>Transceiver direction: 1 transmit (write), 0 receive (read)</td><td></td></tr>
+    <tr><td><span class="ov">DEN</span></td><td>Enables the data transceivers</td><td></td></tr>
+    <tr><td>READY</td><td>0 → insert wait states Tw after T3</td><td>slow memory/I/O</td></tr>
+    <tr><td><span class="ov">TEST</span></td><td>Checked by WAIT instruction; idle while 1</td><td>wired to 8087 BUSY</td></tr>
+    <tr><td>INTR / <span class="ov">INTA</span></td><td>Maskable interrupt (level), needs IF = 1 / acknowledge</td><td></td></tr>
+    <tr><td>NMI</td><td>Non-maskable, rising edge, always type 2</td><td>power fail, parity error</td></tr>
+    <tr><td>RESET</td><td>High ≥ 4 clocks → CS = FFFFH, IP = 0000H, IF = 0</td><td>first fetch at <b>FFFF0H</b></td></tr>
+    <tr><td>HOLD / HLDA</td><td>DMA asks for the bus / CPU grants it (floats to Z)</td><td>min mode only</td></tr>
+    <tr><td>MN/<span class="ov">MX</span></td><td>1 = minimum, 0 = maximum</td><td></td></tr>
+    <tr><td>CLK</td><td>From 8284A, 33% duty cycle</td><td>crystal ÷ 3</td></tr></table></div>
+    <div class="grid2" style="margin-top:12px">
+      <div>
+        <h4>Minimum vs maximum (one line)</h4>
+        <p><b>Min (MN/MX = 1):</b> 8086 alone makes every control signal. Support: 8284 clock, 3 × 8282 latches, 2 × 8286 transceivers.</p>
+        <p><b>Max (MN/MX = 0):</b> with 8087/8089; the 8086 outputs S2 S1 S0 and the <b>8288 bus controller</b> makes the commands. HOLD/HLDA become RQ/GT0, RQ/GT1.</p>
+        <p class="sub">Full circuits, pin swap table and live timing: Circuits tab.</p>
+      </div>
+      <div>
+        <h4>Memory banks</h4>
+        <div class="tw"><table><tr><th><span class="ov">BHE</span></th><th>A0</th><th>Transfer</th></tr><tr><td>0</td><td>0</td><td>whole word, 1 bus cycle</td></tr><tr><td>0</td><td>1</td><td>odd byte (D15–D8)</td></tr><tr><td>1</td><td>0</td><td>even byte (D7–D0)</td></tr><tr><td>1</td><td>1</td><td>none</td></tr></table></div>
+        <p class="sub">A word at an odd address (e.g. 42001H) needs 2 bus cycles.</p>
+        <h4>Interrupt acknowledged</h4>
+        <p>Push <b>FLAGS → CS → IP</b> (SP − 6), clear IF and TF, load new CS:IP from the vector table. IRET restores. Top of stack = old IP.</p>
+      </div>
+    </div>
+    <div class="hook"><b>Hooks:</b> “<b>ALE latches, DEN enables, DT/R directs</b>.” Chip count <b>1-3-2</b> (8284, 8282s, 8286s). Min = 1 = alone; Max = 0 = with friends + 8288. Interrupt pushes <b>F-C-I</b>.</div>
+    <p class="next">Next link → <b>the instructions that use all this</b>.</p>
+  </div></div>
+
+  <!-- STEP 9 -->
+  <div class="step" id="s9"><div class="step-num">9</div><div class="card">
+    <span class="tag">8086 software</span>
+    <h3>Addressing modes and data transfer instructions</h3>
+    <p class="oneline">EA = offset (base + index + disp). PA = segment × 10H + EA. If BP is in the brackets, the segment is SS; otherwise DS.</p>
+    <div class="tw"><table><tr><th>#</th><th>Mode</th><th>Example</th><th>EA</th><th>Segment</th></tr>
+    <tr><td>1</td><td>Immediate</td><td class="mono">MOV AX, 1234H</td><td>data in instruction</td><td>—</td></tr>
+    <tr><td>2</td><td>Register</td><td class="mono">MOV AX, BX</td><td>—</td><td>—</td></tr>
+    <tr><td>3</td><td>Direct</td><td class="mono">MOV AX, [1234H]</td><td>disp16</td><td>DS</td></tr>
+    <tr><td>4</td><td>Register indirect</td><td class="mono">MOV AX, [BX]</td><td>BX/SI/DI (BP)</td><td>DS (SS)</td></tr>
+    <tr><td>5</td><td>Based</td><td class="mono">MOV AX, [BX+4]</td><td>BX or BP + disp</td><td>DS / SS</td></tr>
+    <tr><td>6</td><td>Indexed</td><td class="mono">MOV AX, [SI+4]</td><td>SI or DI + disp</td><td>DS</td></tr>
+    <tr><td>7</td><td>Based-indexed</td><td class="mono">MOV AX, [BX+SI+4]</td><td>base + index + disp</td><td>DS / SS</td></tr>
+    <tr><td>8</td><td>String</td><td class="mono">MOVSB</td><td>SI, DI</td><td>DS:SI → ES:DI</td></tr>
+    <tr><td>9</td><td>I/O port</td><td class="mono">IN AL, 60H · IN AL, DX</td><td>port</td><td>—</td></tr>
+    <tr><td>10</td><td>Implied</td><td class="mono">CLC, CBW, XLAT</td><td>—</td><td>—</td></tr></table></div>
+    <div class="grid2" style="margin-top:12px">
+      <div>
+        <h4>Legal rules</h4>
+        <ul class="tight">
+          <li>Only <b>BX, BP, SI, DI</b> can point. [AX], [CX], [DX] are illegal.</li>
+          <li>Pairs: [BX+SI] [BX+DI] → DS · [BP+SI] [BP+DI] → SS. Never [BX+BP] or [SI+DI].</li>
+          <li>Override prefix: ES 26H, CS 2EH, SS 36H, DS 3EH. Cannot override: fetch (CS:IP), stack (SS:SP), string destination (ES:DI).</li>
+          <li>Little-endian: low byte at the lower address. MOV AX,1234H = B8 34 12.</li>
+          <li>Data transfer changes no flags (except SAHF, POPF).</li>
+        </ul>
+      </div>
+      <div>
+        <h4>Illegal → fix</h4>
+        <div class="tw"><table>
+        <tr><td class="mono">MOV [SI],[DI]</td><td>mem→mem: go through AL</td></tr>
+        <tr><td class="mono">MOV DS,2000H</td><td>MOV AX,2000H; MOV DS,AX</td></tr>
+        <tr><td class="mono">MOV CS,AX · POP CS</td><td>use far JMP/CALL/RETF</td></tr>
+        <tr><td class="mono">MOV ES,DS</td><td>MOV AX,DS; MOV ES,AX</td></tr>
+        <tr><td class="mono">MOV AX,BL</td><td>size mismatch</td></tr>
+        <tr><td class="mono">MOV [BX],5</td><td>MOV BYTE PTR [BX],5</td></tr>
+        <tr><td class="mono">IN AL,3F8H</td><td>MOV DX,3F8H; IN AL,DX</td></tr>
+        <tr><td class="mono">IN BL,60H</td><td>only AL/AX</td></tr>
+        <tr><td class="mono">PUSH BL · PUSH 5</td><td>16-bit register/memory only</td></tr>
+        <tr><td class="mono">LEA AX,1234H</td><td>source must be memory</td></tr></table></div>
+      </div>
+    </div>
+    <h4>Instruction cheat table</h4>
+    <div class="tw"><table><tr><th>Instr.</th><th>Does</th><th>Note</th></tr>
+    <tr><td class="mono">PUSH s / POP d</td><td>SP−2 then store / load then SP+2</td><td>reverse order on POP</td></tr>
+    <tr><td class="mono">XCHG a,b</td><td>swap</td><td>XCHG AX,AX = NOP 90H</td></tr>
+    <tr><td class="mono">XLAT</td><td>AL ← [DS:BX+AL]</td><td>table ≤ 256 bytes (hex→ASCII, 7-segment)</td></tr>
+    <tr><td class="mono">LEA r,m</td><td>r ← offset (address, not content)</td><td>MOV BX,TABLE loads content</td></tr>
+    <tr><td class="mono">LDS/LES r,m</td><td>r ← [m], DS/ES ← [m+2]</td><td>loads a far pointer</td></tr>
+    <tr><td class="mono">LAHF / SAHF</td><td>AH ↔ SF ZF – AF – PF – CF</td><td>ZF=CF=1 → AH = 43H</td></tr>
+    <tr><td class="mono">PUSHF / POPF</td><td>whole FLAGS</td><td>only way to set TF</td></tr>
+    <tr><td class="mono">CBW / CWD</td><td>sign-extend AL→AX / AX→DX:AX</td><td>80H → FF80H</td></tr>
+    <tr><td class="mono">DAA / AAA</td><td>BCD fix after ADD</td><td>25H+38H=5DH → DAA → 63H</td></tr>
+    <tr><td class="mono">MUL BL</td><td>AX ← AL × BL</td><td>16-bit: DX:AX ← AX × op</td></tr>
+    <tr><td class="mono">MOVSB / REP</td><td>ES:[DI] ← DS:[SI], SI++, DI++ (CLD)</td><td>REP repeats CX times</td></tr></table></div>
+    <div class="hook"><b>Hooks:</b> “<b>BP brings the Stack</b>.” Only <b>B-B-S-D</b> (BX, BP, SI, DI) can point, one B + one index at most. <b>Little end first.</b></div>
+    <p class="next">Last link → <b>the microcontroller: 8051</b>.</p>
+  </div></div>
+
+  <!-- STEP 10 -->
+  <div class="step" id="s10"><div class="step-num">10</div><div class="card">
+    <span class="tag">8051</span>
+    <h3>The 8051 microcontroller</h3>
+    <p class="oneline">8-bit, everything on one chip: 4 KB ROM, 128 B RAM, four ports, two timers, a UART, five interrupts.</p>
+    <div class="grid2">
+      <figure>
+        <svg viewBox="0 0 520 250" role="img" aria-label="8051 blocks inside one chip">
+          <rect class="bxg" x="10" y="10" width="500" height="230" rx="12"/><text x="24" y="30" class="ts">one chip</text>
+          <rect class="bxa" x="30" y="44" width="150" height="80" rx="8"/><text x="105" y="68" text-anchor="middle" class="tb">8-bit CPU</text><text x="105" y="88" text-anchor="middle" class="ts">A, B, PSW, SP</text><text x="105" y="106" text-anchor="middle" class="ts">PC, DPTR (16-bit)</text>
+          <rect class="bx" x="200" y="44" width="140" height="36" rx="6"/><text x="270" y="67" text-anchor="middle">ROM 4 KB (code)</text>
+          <rect class="bx" x="200" y="88" width="140" height="36" rx="6"/><text x="270" y="111" text-anchor="middle">RAM 128 B (data)</text>
+          <rect class="bx" x="360" y="44" width="130" height="36" rx="6"/><text x="425" y="67" text-anchor="middle">Timer 0, Timer 1</text>
+          <rect class="bx" x="360" y="88" width="130" height="36" rx="6"/><text x="425" y="111" text-anchor="middle">UART (serial)</text>
+          <rect class="bx" x="30" y="140" width="150" height="36" rx="6"/><text x="105" y="163" text-anchor="middle">Interrupts (5)</text>
+          <rect class="bx" x="200" y="140" width="140" height="36" rx="6"/><text x="270" y="163" text-anchor="middle">Oscillator</text>
+          <rect class="bxt" x="30" y="190" width="460" height="36" rx="6"/><text x="260" y="213" text-anchor="middle">Ports P0 · P1 · P2 · P3 (32 I/O lines)</text>
+        </svg>
+        <figcaption>An 8086 would need separate 8255 (ports), 8254 (timer), 8251 (UART), 8259 (interrupts) chips.</figcaption>
+      </figure>
+      <div>
+        <ul class="tight">
+          <li><b>A</b> accumulator · <b>B</b> for MUL AB/DIV AB · <b>R0–R7</b> in 4 banks (00–07H, 08–0FH, 10–17H, 18–1FH) · <b>DPTR</b> 16-bit pointer · <b>PC</b> 16-bit · <b>SP</b> 8-bit, 07H at reset, grows up · <b>PSW</b> CY AC F0 RS1 RS0 OV – P (no zero flag).</li>
+          <li><b>Internal RAM:</b> banks 00–1FH, bit-addressable 20–2FH, general 30–7FH, SFRs 80–FFH.</li>
+          <li><b>Code</b> read by MOVC, fetched with <span class="ov">PSEN</span> · <b>external data</b> by MOVX with <span class="ov">RD</span>/<span class="ov">WR</span> → separate spaces = Harvard-style.</li>
+          <li>P0 = low address/data (ALE latches), P2 = high address. UART on TXD P3.1 / RXD P3.0.</li>
+          <li>Clock: 12 oscillator periods per machine cycle (12 MHz → 1 µs).</li>
+        </ul>
+      </div>
+    </div>
+    <div class="hook"><b>Hook:</b> 8051 = “<b>4-128-4-2-1-5</b>”: 4 KB ROM, 128 B RAM, 4 ports, 2 timers, 1 UART, 5 interrupts.</div>
+    <p class="next">Chain complete. Go to <a href="#equations">Equations</a> or test yourself in <a href="#questions">Solved questions</a>.</p>
+  </div></div>
+</section>
+
+<!-- ========================= EQUATIONS ========================= -->
+<section class="view" id="v-equations">
+  <h2>Every law and equation, with an example</h2>
+  <p class="lead">Grouped by topic. Each card: the formula, what the symbols mean, and a worked example from the course. The live calculators are in Practice.</p>
+  <div id="eq-wrap" class="stack"></div>
+</section>
+
+<!-- ========================= COMPARISONS ========================= -->
+<section class="view" id="v-compare">
+  <h2>All comparisons in one place</h2>
+  <p class="lead">Each table has a one-line memory hook underneath. Pick a topic to jump to it.</p>
+  <div class="cmpnav"><div class="chips" id="cmp-chips"></div></div>
+  <div id="cmp-wrap" class="stack"></div>
+</section>
+
+<!-- ========================= CIRCUITS ========================= -->
+<section class="view" id="v-circuits">
+  <h2>Circuits, modes and clock timing</h2>
+  <p class="lead">Every connection the exams ask you to draw, plus live versions you can change: the mode switch, the bus timing diagram, the decoder solver and the pipeline.</p>
+
+  <div class="card">
+    <h3>A · Minimum and maximum mode systems</h3>
+    <div class="chips" role="group" aria-label="Mode"><button class="chip on" data-mode="min">Minimum mode (MN/MX = 1)</button><button class="chip" data-mode="max">Maximum mode (MN/MX = 0)</button></div>
+    <figure id="mode-min">
+      <svg viewBox="0 0 760 470" role="img" aria-label="Minimum mode: 8284 clock, three 8282 latches, two 8286 transceivers, 74LS244 buffer">
+        <rect class="bx" x="24" y="20" width="190" height="70" rx="8"/><text x="40" y="46" class="tb">8284A clock generator</text><text x="40" y="68" class="ts">crystal on X1, X2 → ÷ 3</text>
+        <rect class="bxa" x="24" y="150" width="190" height="300" rx="8"/><text x="40" y="176" class="tb">8086 · MN/MX = +5 V</text>
+        <text x="40" y="214" class="tm">AD0–AD15</text><text x="40" y="234" class="tm">A16–A19, BHE</text><text x="40" y="254" class="tm">ALE</text>
+        <text x="40" y="324" class="tm">DEN, DT/R</text><text x="40" y="420" class="tm">M/IO, RD, WR</text>
+        <path class="ln" d="M119 90V148" marker-end="url(#ar)"/><text x="128" y="124" class="ts">CLK, RESET, READY</text>
+        <rect class="bx" x="300" y="180" width="214" height="76" rx="8"/><text x="316" y="206" class="tb">3 × 8282 latch</text><text x="316" y="228" class="ts">STB ← ALE · OE ← GND</text><text x="316" y="246" class="ts">holds A0–A19 + BHE</text>
+        <rect class="bx" x="300" y="284" width="214" height="76" rx="8"/><text x="316" y="310" class="tb">2 × 8286 transceiver</text><text x="316" y="332" class="ts">OE ← DEN · T ← DT/R</text><text x="316" y="350" class="ts">two-way D0–D15</text>
+        <rect class="bx" x="300" y="388" width="214" height="56" rx="8"/><text x="316" y="412" class="tb">74LS244 buffer</text><text x="316" y="432" class="ts">one-way drive</text>
+        <path class="ln" d="M214 218H298" marker-end="url(#ar)"/><text x="256" y="210" text-anchor="middle" class="ts">address</text>
+        <path class="lna" d="M214 256H260V240H298" marker-end="url(#ara)"/><text x="232" y="272" class="ts ta">ALE</text>
+        <path class="ln" d="M214 322H298" marker-start="url(#ar)" marker-end="url(#ar)"/><text x="256" y="314" text-anchor="middle" class="ts">data</text>
+        <path class="ln" d="M214 416H298" marker-end="url(#ar)"/><text x="256" y="408" text-anchor="middle" class="ts">control</text>
+        <rect class="bxg" x="560" y="190" width="176" height="56" rx="8"/><text x="576" y="214" class="tb">Address bus</text><text x="576" y="234" class="ts">A0–A19 + BHE → 1 MB</text>
+        <rect class="bxg" x="560" y="294" width="176" height="56" rx="8"/><text x="576" y="318" class="tb">Data bus</text><text x="576" y="338" class="ts">D0–D15, both ways</text>
+        <rect class="bxg" x="560" y="388" width="176" height="56" rx="8"/><text x="576" y="412" class="tb">Control bus</text><text x="576" y="432" class="ts">M/IO, RD, WR</text>
+        <path class="ln" d="M514 218H558" marker-end="url(#ar)"/><path class="ln" d="M514 322H558" marker-start="url(#ar)" marker-end="url(#ar)"/><path class="ln" d="M514 416H558" marker-end="url(#ar)"/>
+      </svg>
+      <figcaption>Why 3 latches: 20 address bits + BHE need three 8-bit latches. Why 2 transceivers: 16 data bits. Latches keep the address after the pins switch to data; transceivers drive both directions.</figcaption>
+    </figure>
+    <figure id="mode-max" hidden>
+      <svg viewBox="0 0 760 390" role="img" aria-label="Maximum mode: 8086 status lines to 8288 bus controller, 8087 coprocessor on RQ/GT0">
+        <rect class="bx" x="24" y="20" width="180" height="60" rx="8"/><text x="40" y="46" class="tb">8284A clock</text><text x="40" y="66" class="ts">CLK, RESET, READY</text>
+        <rect class="bxa" x="24" y="130" width="180" height="230" rx="8"/><text x="40" y="156" class="tb">8086 · MN/MX = GND</text>
+        <text x="40" y="190" class="tm">S2, S1, S0</text><text x="40" y="240" class="tm">AD0–AD15, A16–A19</text><text x="40" y="300" class="tm">RQ/GT0, QS1, QS0</text><text x="40" y="320" class="tm">TEST, LOCK</text>
+        <path class="ln" d="M114 80V128" marker-end="url(#ar)"/>
+        <rect class="bxt" x="300" y="20" width="210" height="150" rx="8"/><text x="316" y="46" class="tb">8288 bus controller</text><text x="316" y="70" class="ts">in: S2 S1 S0, CLK</text><text x="316" y="96" class="tm">MRDC MWTC AMWC</text><text x="316" y="116" class="tm">IORC IOWC AIOWC</text><text x="316" y="136" class="tm">INTA</text><text x="316" y="156" class="tm">ALE DEN DT/R</text>
+        <path class="lna" d="M204 186H260V100H298" marker-end="url(#ara)"/><text x="214" y="178" class="ts ta">S2 S1 S0</text>
+        <rect class="bxg" x="560" y="40" width="176" height="110" rx="8"/><text x="576" y="66" class="tb">Command bus</text><text x="576" y="88" class="ts">memory read/write</text><text x="576" y="106" class="ts">I/O read/write</text><text x="576" y="124" class="ts">interrupt acknowledge</text>
+        <path class="ln" d="M510 96H558" marker-end="url(#ar)"/>
+        <rect class="bx" x="300" y="200" width="210" height="64" rx="8"/><text x="316" y="226" class="tb">3 × 8282 + 2 × 8286</text><text x="316" y="248" class="ts">ALE, DEN, DT/R come from 8288</text>
+        <path class="ln" d="M405 170V198" marker-end="url(#ar)"/>
+        <path class="ln" d="M204 236H298" marker-end="url(#ar)"/>
+        <rect class="bxg" x="560" y="204" width="176" height="56" rx="8"/><text x="576" y="228" class="tb">Address + data bus</text><text x="576" y="248" class="ts">shared with 8087</text>
+        <path class="ln" d="M510 232H558" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <rect class="bx" x="300" y="296" width="210" height="64" rx="8"/><text x="316" y="322" class="tb">8087 coprocessor</text><text x="316" y="344" class="ts">BUSY → TEST, watches QS</text>
+        <path class="ln" d="M204 318H298" marker-start="url(#ar)" marker-end="url(#ar)"/><text x="250" y="310" text-anchor="middle" class="ts">RQ/GT0, QS</text>
+      </svg>
+      <figcaption>The 8086 no longer makes RD/WR itself: it sends a 3-bit status code and the 8288 decodes it into commands.</figcaption>
+    </figure>
+    <div class="grid2">
+      <div class="tw"><table id="mode-table"></table></div>
+      <div class="tw"><table><tr><th>S2 S1 S0</th><th>Bus cycle</th><th>8288 output</th></tr>
+        <tr><td class="mono">000</td><td>Interrupt ack</td><td>INTA</td></tr><tr><td class="mono">001</td><td>I/O read</td><td>IORC</td></tr><tr><td class="mono">010</td><td>I/O write</td><td>IOWC, AIOWC</td></tr><tr><td class="mono">011</td><td>Halt</td><td>none</td></tr>
+        <tr><td class="mono">100</td><td>Opcode fetch</td><td>MRDC</td></tr><tr><td class="mono">101</td><td>Memory read</td><td>MRDC</td></tr><tr><td class="mono">110</td><td>Memory write</td><td>MWTC, AMWC</td></tr><tr><td class="mono">111</td><td>Passive</td><td>none</td></tr></table>
+        <p class="sub">S2 = 0 → I/O side, S2 = 1 → memory side. QS1 QS0: 00 nothing · 01 first opcode byte · 10 queue emptied · 11 next byte.</p></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>B · Bus cycle timing (T1–T4) — live</h3>
+    <div class="form">
+      <label for="tm-op">Operation<select id="tm-op"><option value="r">Memory read</option><option value="w">Memory write</option></select></label>
+      <label for="tm-w">Wait states<select id="tm-w"><option value="0">0 (READY = 1)</option><option value="1">1 (READY = 0 in T3)</option><option value="2">2</option></select></label>
+      <label for="tm-f">Clock (MHz)<input id="tm-f" type="number" value="5" min="1" max="20" step="1"></label>
+    </div>
+    <div class="tw"><figure id="tm-fig"></figure></div>
+    <div class="out" id="tm-out"></div>
+    <div class="tw" style="margin-top:8px"><table><tr><th>State</th><th>What happens</th></tr>
+      <tr><td>T1</td><td>Address on AD0–AD15, A16–A19, BHE. ALE pulses and the latches grab it. DT/R set (0 read, 1 write).</td></tr>
+      <tr><td>T2</td><td>Status replaces A16–A19. Read: AD bus floats (Z). Write: CPU drives data. RD or WR goes low; DEN goes low.</td></tr>
+      <tr><td>T3</td><td>Data moves. READY sampled: if 0, Tw states are inserted after T3.</td></tr>
+      <tr><td>T4</td><td>Read: CPU latches data. Write: memory stores as WR rises. RD/WR/DEN return high.</td></tr></table></div>
+    <p class="sub">Read has a float (Z) period because the CPU must let go of AD lines for memory to drive them; in a write the CPU keeps driving. 8284A clock: crystal ÷ 3, 33% duty (high 1/3, low 2/3) — 15 MHz crystal → 5 MHz CLK → T = 200 ns.</p>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>C · Address decoding with the 74LS138 — live solver</h3>
+    <p>Type the chip size and the start address of each chip. The solver builds the memory-map table and wires the decoder. Default = the exam question.</p>
+    <div class="form">
+      <label for="dc-size">Chip size<select id="dc-size"><option value="8192">8 KB</option><option value="16384">16 KB</option><option value="32768">32 KB</option><option value="65536" selected>64 KB</option><option value="131072">128 KB</option></select></label>
+      <label for="dc-starts">Start addresses (hex, comma)<input id="dc-starts" style="width:230px" value="90000, B0000"></label>
+      <button class="btn" id="dc-go">Solve</button>
+    </div>
+    <div class="out" id="dc-out"></div>
+    <div class="tw" id="dc-table"></div>
+    <div class="tw"><figure id="dc-fig"></figure></div>
+    <div class="hook"><b>Method:</b> (1) chip lines = log₂(size) → those go to every chip. (2) End = start + size − 1. (3) Write A19…A16 for each start. (4) Bits that <b>change</b> between chips → C B A (A = lowest). (5) Bits that stay <b>fixed</b> → enables: a fixed 1 → G1 (active high), a fixed 0 → G2A/G2B (active low). Unused G1 → Vcc, unused G2 → GND. (6) Output number = CBA value → that chip's CS.</div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>D · Memory banks: BHE and A0 — live</h3>
+    <div class="form"><label for="bk-a">Physical address (hex)<input id="bk-a" value="42001"></label><label for="bk-s">Size<select id="bk-s"><option value="w">Word (16-bit)</option><option value="b">Byte</option></select></label></div>
+    <div class="tw"><figure id="bk-fig"></figure></div>
+    <div class="out" id="bk-out"></div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>E · Pipeline and flush — live</h3>
+    <div class="chips" role="group" aria-label="Pipeline mode"><button class="chip on" data-pp="seq">No pipeline</button><button class="chip" data-pp="pipe">8086 two-stage (BIU + EU)</button><button class="chip" data-pp="flush">With a taken JMP (flush)</button></div>
+    <div class="tw" id="pp-grid"></div>
+    <p class="out" id="pp-out"></p>
+  </div>
+</section>
+
+<!-- ========================= QUESTIONS ========================= -->
+<section class="view" id="v-questions">
+  <h2>Solved questions</h2>
+  <p class="lead">Every revision, tutorial, assignment and exam question from the course files. Try it first, then open it: each answer starts with <b style="color:var(--acc2)">the idea</b> (how to think), then the answer.</p>
+  <div class="chips" id="q-chips"></div>
+  <p><button class="btn ghost" id="q-all">Open all answers</button></p>
+  <div id="q-wrap"></div>
+</section>
+
+<!-- ========================= PRACTICE ========================= -->
+<section class="view" id="v-practice">
+  <h2>Practice</h2>
+  <p class="lead">Calculators that show their working, a stack simulator, an MCQ quiz and flashcards.</p>
+  <div class="grid2">
+    <div class="card">
+      <h3>Physical address</h3>
+      <div class="form"><label for="pa-s">Segment (hex)<input id="pa-s" value="020A"></label><label for="pa-o">Offset (hex)<input id="pa-o" value="1BCD"></label></div>
+      <div id="pa-grid"></div><div class="out" id="pa-out"></div>
+    </div>
+    <div class="card">
+      <h3>Execute a MOV (EA → PA → bytes)</h3>
+      <div class="form">
+        <label for="ea-b">Base<select id="ea-b"><option>none</option><option selected>BX</option><option>BP</option></select></label>
+        <label for="ea-i">Index<select id="ea-i"><option>none</option><option>SI</option><option selected>DI</option></select></label>
+        <label for="ea-d">Disp (hex)<input id="ea-d" value="05"></label>
+        <label for="ea-o">Override<select id="ea-o"><option>none</option><option>DS</option><option>SS</option><option>ES</option><option>CS</option></select></label>
+        <label for="ea-src">Store (hex word)<input id="ea-src" value="0403"></label>
+      </div>
+      <div class="form">
+        <label for="r-bx">BX<input id="r-bx" value="0605"></label><label for="r-bp">BP<input id="r-bp" value="3030"></label><label for="r-si">SI<input id="r-si" value="5050"></label><label for="r-di">DI<input id="r-di" value="7070"></label>
+        <label for="r-ds">DS<input id="r-ds" value="0800"></label><label for="r-ss">SS<input id="r-ss" value="6060"></label><label for="r-es">ES<input id="r-es" value="0505"></label><label for="r-cs">CS<input id="r-cs" value="0710"></label>
+      </div>
+      <div class="out" id="ea-out"></div>
+    </div>
+    <div class="card">
+      <h3>Flags after ADD / SUB</h3>
+      <div class="form"><label for="fl-a">A (hex)<input id="fl-a" value="7F"></label><label for="fl-op">Op<select id="fl-op"><option value="add">ADD</option><option value="sub">SUB</option></select></label><label for="fl-b">B (hex)<input id="fl-b" value="01"></label><label for="fl-w">Size<select id="fl-w"><option value="8">8-bit</option><option value="16">16-bit</option></select></label></div>
+      <div class="out" id="fl-out"></div>
+    </div>
+    <div class="card">
+      <h3>Pipeline · cache · clock · address bus</h3>
+      <div class="form"><label for="pl-k">Stages k<input id="pl-k" type="number" value="3"></label><label for="pl-n">Instructions n<input id="pl-n" type="number" value="10"></label><label for="pl-t">Stage time t<input id="pl-t" type="number" value="2"></label></div>
+      <div class="out" id="pl-out"></div>
+      <div class="form"><label for="ca-h">Hit rate h<input id="ca-h" type="number" step="0.01" value="0.9"></label><label for="ca-c">Cache ns<input id="ca-c" type="number" value="10"></label><label for="ca-m">Memory ns<input id="ca-m" type="number" value="100"></label></div>
+      <div class="out" id="ca-out"></div>
+      <div class="form"><label for="ck-f">Clock MHz<input id="ck-f" type="number" value="8"></label><label for="ck-n">T-states<input id="ck-n" type="number" value="4"></label><label for="ck-w">Wait states<input id="ck-w" type="number" value="1"></label><label for="ab-n">Address lines<input id="ab-n" type="number" value="20"></label></div>
+      <div class="out" id="ck-out"></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>Stack simulator (PUSH, POP, interrupt)</h3>
+    <div class="form">
+      <label for="st-ss">SS<input id="st-ss" value="2002"></label><label for="st-sp">SP<input id="st-sp" value="0010"></label>
+      <label for="st-ax">AX<input id="st-ax" value="0008"></label><label for="st-bx">BX<input id="st-bx" value="0030"></label>
+      <label for="st-cs">CS<input id="st-cs" value="1000"></label><label for="st-ip">IP<input id="st-ip" value="0100"></label><label for="st-fl">FLAGS<input id="st-fl" value="0046"></label>
+      <button class="btn ghost" id="st-load">Load values</button>
+    </div>
+    <p><button class="btn" data-st="pushax">PUSH AX</button> <button class="btn" data-st="pushbx">PUSH BX</button> <button class="btn" data-st="popax">POP AX</button> <button class="btn" data-st="popbx">POP BX</button> <button class="btn" data-st="int">Interrupt</button> <button class="btn" data-st="iret">IRET</button></p>
+    <div class="grid2"><div class="tw" id="st-mem"></div><div class="out" id="st-log"></div></div>
+  </div>
+
+  <div class="card quiz" style="margin-top:16px">
+    <h3>MCQ quiz <span class="score" id="qz-score"></span></h3>
+    <p class="sub">The exam MCQ bank plus extra questions in the same style. Click an option to see why.</p>
+    <p><button class="btn ghost" id="qz-reset">Reset quiz</button></p>
+    <div id="qz-wrap" class="grid2"></div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3>Flashcards</h3>
+    <p class="sub">Click a card to flip it. <button class="btn ghost" id="fc-shuffle">Shuffle</button></p>
+    <div class="grid3" id="fc-wrap"></div>
+  </div>
+</section>
+</main>
+
+<script>
+(function(){
+'use strict';
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const hx=(n,w)=>(n>>>0).toString(16).toUpperCase().padStart(w,'0');
+const ph=s=>{const t=String(s).trim().replace(/h$/i,'');return /^[0-9a-f]+$/i.test(t)?parseInt(t,16):NaN;};
+
+/* ---------- router ---------- */
+const views=['chain','equations','compare','circuits','questions','practice'];
+function route(){let h=location.hash.slice(1);if(!views.includes(h))h='chain';
+  $$('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+h));
+  $$('nav.tabs a').forEach(a=>a.classList.toggle('on',a.getAttribute('href')==='#'+h));}
+addEventListener('hashchange',()=>{route();window.scrollTo(0,0);});route();
+
+/* ---------- chain bar ---------- */
+const chainNames=['Basics','VN vs Harvard','Inside the CPU','Memory & buses','Programming','µP system','8086 architecture','8086 hardware','Addressing & instructions','8051'];
+$('#chainbar').innerHTML=chainNames.map((n,i)=>(i?'<span class="arrow">→</span>':'')+'<button data-s="s'+(i+1)+'"><b>'+(i+1)+'</b>'+n+'</button>').join('');
+$('#chainbar').addEventListener('click',e=>{const b=e.target.closest('button');if(b)document.getElementById(b.dataset.s).scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});});
+
+/* ---------- fetch walkthrough ---------- */
+const fsteps=[
+ ['f-pc','1. PC holds the address of the next instruction.'],
+ ['f-a1','2. The address is copied PC → MAR.'],
+ ['f-a2','3. MAR drives the address bus to memory.'],
+ ['f-a3','4. Control unit asserts RD (memory read).'],
+ ['f-a4','5. Memory puts the instruction on the data bus → MDR.'],
+ ['f-a5','6. The instruction moves MDR → IR.'],
+ ['f-a6','7. Control unit decodes the IR.'],
+ ['f-a7','8. PC advances (PC + instruction length). Then Execute, Store, repeat.']];
+let fi=-1;
+function fdraw(){fsteps.forEach(([id],k)=>{const el=document.getElementById(id);if(!el)return;
+  if(el.tagName==='rect'){el.setAttribute('class',k===fi?'bxa':'bx');}
+  else{el.setAttribute('class',k===fi?'lna':'ln');el.setAttribute('marker-end',k===fi?'url(#ara)':'url(#ar)');}});
+  $('#fetch-txt').textContent=fi<0?'Press “Next step” to start the fetch cycle.':fsteps[fi][1];}
+$('#fetch-next').onclick=()=>{fi=(fi+1)%fsteps.length;fdraw();};
+$('#fetch-reset').onclick=()=>{fi=-1;fdraw();};fdraw();
+
+/* ---------- equations ---------- */
+const EQ=[
+ ['Memory & addressing',[
+  ['Address space','Locations = 2<sup>N</sup>','N = number of address lines','16 lines → 65,536 = 64 KB · 20 lines (8086) → 1,048,576 = 1 MB'],
+  ['Address lines inside a chip','n = log₂(chip size)','The lowest n address lines go to every chip; the rest are decoded','64 KB → 16 lines (A0–A15) · 8 KB → 13 lines'],
+  ['End address of a chip','End = Start + Size − 1','Size in hex: 64 KB = 10000H','90000H + FFFFH = 9FFFFH · B0000H → BFFFFH'],
+  ['Physical address (8086)','PA = Segment × 10H + Offset','× 10H = append a hex 0','CS = 020AH, IP = 1BCDH → 020A0H + 1BCDH = 03C6DH'],
+  ['Effective address','EA = Base + Index + Disp','Base = BX or BP · Index = SI or DI · Disp 8/16-bit','BX = 0605H, DI = 7070H, disp 05H → EA = 767AH'],
+  ['Default segment','BP used → SS, else DS · strings: DS:SI → ES:DI','A prefix (ES:, CS:…) overrides for one instruction','[BP+06H], SS = 6060H, BP = 3030H → 60600H + 3036H = 63636H'],
+  ['Segment range','From Seg × 10H to Seg × 10H + FFFFH','Every segment = 64 KB','DS = 2000H → 20000H to 2FFFFH'],
+  ['Little-endian store','[PA] ← low byte · [PA+1] ← high byte','A word occupies 2 cells','AX = 0403H at 0F67AH → [0F67AH] = 03H, [0F67BH] = 04H'],
+  ['Bus cycles per word','Even address → 1 cycle · Odd address → 2 cycles','Even bank = D0–D7 (A0 = 0), odd bank = D8–D15 (BHE = 0)','Word at 42001H → 2 bus cycles'],
+  ['I/O port range','Direct: 00H–FFH (256) · via DX: 0000H–FFFFH (65,536)','IN/OUT use AL or AX only','OUT 2F8H, AL is illegal → MOV DX, 2F8H; OUT DX, AL'],
+  ['RESET address','PA = FFFFH × 10H + 0000H = FFFF0H','After RESET: CS = FFFFH, IP = 0000H, IF = 0','Boot ROM sits at FFFF0H']]],
+ ['Stack',[
+  ['PUSH','SP ← SP − 2, then [SS:SP] ← word','16-bit only, grows down','SS = 3000H, SP = 0100H, PUSH AX → SP = 00FEH, word at 300FEH'],
+  ['POP','word ← [SS:SP], then SP ← SP + 2','Pop in reverse order of push','PUSH AX, PUSH BX, POP AX, POP BX swaps AX and BX'],
+  ['Interrupt','SP ← SP − 6 (FLAGS, CS, IP pushed)','Top of stack = old IP','SS = 2002H, SP = 0010H → SP = 000AH, top at 2002AH = 0100H (IP)'],
+  ['Top of stack address','PA = SS × 10H + SP','','SS = 3864H, SP = 1735H → 39D75H']]],
+ ['Timing',[
+  ['Clock period','T = 1 / f','f in MHz → T in µs','5 MHz → 200 ns · 8 MHz → 125 ns'],
+  ['Instruction / operation time','t = (number of T-states) × T','','4 T-states at 5 MHz → 800 ns'],
+  ['Bus cycle with waits','t_bus = (4 + Tw) × T','Tw = wait states added while READY = 0','8 MHz, 1 wait → 5 × 125 = 625 ns'],
+  ['8284A clock','f_CLK = f_crystal / 3, duty 33%','8086 has no internal oscillator','15 MHz crystal → 5 MHz'],
+  ['8051 machine cycle','t_MC = 12 / f_osc','12 oscillator periods per machine cycle','12 MHz → 1 µs']]],
+ ['Performance',[
+  ['Sequential time','T_seq = n × k × t','n instructions, k stages, t per stage','10 × 3 × 2 ms = 60 ms'],
+  ['Pipelined time','T_pipe = (k + n − 1) × t','First instruction fills the pipe, then one finishes per stage time','(3 + 10 − 1) × 2 = 24 ms → saves 36 ms'],
+  ['Speed-up','S = n·k / (k + n − 1)','Approaches k for large n','30 / 12 = 2.5'],
+  ['Average memory time','t_avg = h·t_cache + (1 − h)·t_main','h = hit rate','0.9 × 10 + 0.1 × 100 = 19 ns'],
+  ['Moore’s Law','Transistors double every 18–24 months','log₂(components) vs year = straight line','4004: 2,300 → 3rd-gen Core: 1.4 billion']]],
+ ['Flags',[
+  ['Carry CF','CF = 1 if unsigned result > max (or borrow)','Byte max FFH, word max FFFFH','FFH + 01H = 00H → CF = 1, ZF = 1'],
+  ['Overflow OF','OF = 1 if two same-sign operands give opposite-sign result','Signed range −128…127 / −32768…32767','7FH + 01H = 80H → OF = 1, CF = 0'],
+  ['Parity PF','PF = 1 if low byte has an even number of 1s','','03H → two 1s → PF = 1'],
+  ['Auxiliary AF','AF = 1 if carry out of bit 3','Used by DAA/AAA','0FH + 01H → AF = 1'],
+  ['Masking','AND clears, OR sets, XOR toggles','Mask bit 0 clears with AND','Clear bits 7,6 of AL → AND AL, 3FH']]]
+];
+$('#eq-wrap').innerHTML=EQ.map(([g,items])=>'<div><h3>'+g+'</h3><div class="grid3" style="margin-top:8px">'+items.map(([t,f,m,ex])=>'<div class="eq"><h4>'+t+'</h4><div class="f">'+f+'</div>'+(m?'<div class="sub">'+m+'</div>':'')+'<div class="ex"><span class="k">Example</span><br>'+ex+'</div></div>').join('')+'</div></div>').join('');
+
+/* ---------- comparisons ---------- */
+const CMP=[
+ ['µP vs µC',['','Microprocessor (8086)','Microcontroller (8051)'],[['On chip','CPU only','CPU + RAM + ROM + I/O + timers + UART'],['Needs outside','RAM, ROM, I/O, decoder','Almost nothing (crystal, reset, power)'],['Purpose','General purpose, expandable','One dedicated control task'],['Cost / power','Higher','Lower'],['Examples','PC, laptop','Washing machine, remote, car']],'Brain that needs a body vs brain with the body attached.'],
+ ['Von Neumann vs Harvard',['','Von Neumann','Harvard'],[['Memory','One for code + data','Separate program and data'],['Bus','One shared','One per memory'],['Fetch + data together','No (bottleneck)','Yes, same cycle'],['Hardware','Simpler, cheaper','More pins, faster'],['Example','8086, PCs','8051, PIC, DSPs']],'One road vs two roads.'],
+ ['Architecture vs organization',['','Architecture','Organization'],[['Meaning','What the programmer sees','How hardware builds it'],['Includes','Instruction set, registers, addressing modes, data types','Control signals, bus widths, timing, memory tech'],['Example','8086 = 8088','8086 16-bit bus, 8088 8-bit bus']],'What vs how.'],
+ ['RAM vs ROM',['','RAM','ROM'],[['Read / write','Both','Read only (normally)'],['Volatile','Yes','No'],['Holds','Variables, stack, programs in use','Boot code, firmware, constants'],['Control lines','MRDC + MWTC','MRDC only']],'RAM forgets at power-off; ROM remembers.'],
+ ['SRAM vs DRAM',['','SRAM','DRAM'],[['Cell','Flip-flop','Capacitor'],['Speed','Fast','Slower'],['Refresh','No','Yes'],['Density / cost','Low / high','High / cheap'],['Use','Cache','Main memory']],'S = Static = Speedy; D = Dynamic = Dense.'],
+ ['Main memory vs cache',['','Cache','Main memory'],[['Size','Small (KB–MB)','Large (MB–GB)'],['Speed','Fast (few cycles)','Slower (tens of cycles)'],['Technology','SRAM','DRAM'],['Position','Between CPU and main memory','On the system bus'],['Checked','First','On a miss']],'Cache = desk drawer; main memory = filing cabinet.'],
+ ['Address vs data vs control bus',['','Address','Data','Control'],[['Carries','Where','What','When / which operation'],['Direction','One-way (out)','Two-way','Mixed'],['Width decides','Memory size 2^N','Bits per transfer','Available functions'],['8086','A0–A19','D0–D15','RD, WR, M/IO, ALE, READY']],'Only the data bus is bidirectional.'],
+ ['Standard vs PLD vs ASIC',['','Standard','PLD','ASIC'],[['Set by','Factory','User after manufacture','Designer before fabrication'],['Flexible','No','Yes','No'],['Example','7400','FPGA, CPLD','One-product chip']],'Fixed, field-programmable, custom.'],
+ ['Machine vs assembly vs high-level',['','Machine','Assembly','High-level'],[['Written as','Binary/hex B0 05','MOV AL, 05H','sum = a + b;'],['Translated by','Nothing','Assembler','Compiler'],['Instructions per line','1','1','Many'],['Registers visible','Yes','Yes','No'],['Portable','No','No','Yes']],'Assembly is one-to-one with machine code.'],
+ ['Compiler vs assembler',['','Compiler','Assembler'],[['Input','High-level source','Assembly source'],['Output','Assembly / object code','Machine code'],['Mapping','1 → many','1 → 1'],['Portable source','Yes','No']],'Compiler from C, assembler from mnemonics.'],
+ ['RISC vs CISC',['','RISC','CISC'],[['Instructions','Simple, regular','Rich, complex'],['Length','Fixed (often 32-bit)','Variable (8086 1–6 B, 8051 1–3 B)'],['Addressing modes','Few','Many'],['Memory access','LOAD/STORE only','Memory operands allowed'],['Registers','Many (≈32)','Fewer (8086: 8 general)'],['Decoding','Simple, hard-wired','Complex, microcoded'],['Pipelining','Easy','Harder'],['Code density','Lower','Higher'],['Examples','ARM, MIPS, RISC-V','x86, 8086, 8051']],'RISC: many simple steps. CISC: few powerful steps.'],
+ ['I/O-mapped vs memory-mapped',['','I/O-mapped','Memory-mapped'],[['Address space','Separate','Shared with memory'],['Instructions','IN, OUT','Any MOV'],['Memory lost','None','Some addresses used'],['Decoding','Needs M/IO','Like memory'],['Processors','8086','8086 (optional), 8051 SFRs + MOVX']],'Own building vs rooms inside the memory building.'],
+ ['Parallel vs serial',['','Parallel','Serial'],[['Bits at a time','Many','One'],['Wires','Many','Few'],['Distance','Short','Long'],['Needs','Wide bus','Protocol, baud rate'],['Example','Data bus, 8255, P1','UART 8251, 8051 TXD/RXD']],'Highway vs single lane.'],
+ ['Programmed vs interrupt vs DMA',['','Polled (programmed)','Interrupt-driven','DMA'],[['Who moves data','CPU','CPU, when asked','DMA controller'],['CPU busy','Waiting / checking','Only in the service routine','Free (bus handed over)'],['Best for','Fast simple devices','Slow devices','Bulk transfers'],['Signals','Ready flag','INTR / INTA','HOLD / HLDA']],'Keep asking · get called · let someone else carry it.'],
+ ['Immediate vs register addressing',['','Immediate','Register'],[['Operand','Inside the instruction','In a register'],['Memory access','None after fetch','None'],['Example','MOV AX, 0025H','MOV AX, BX']],'Constant vs variable already in CPU.'],
+ ['Direct vs register indirect',['','Direct','Register indirect'],[['Address in','The instruction','A register (BX, SI, DI, BP)'],['Changeable at run time','No','Yes'],['Example','MOV AX, [2345H]','MOV AL, [BX]']],'Written address vs pointer.'],
+ ['Based vs indexed vs based-indexed',['','Based','Indexed','Based-indexed'],[['EA','BX/BP + disp','SI/DI + disp','base + index + disp'],['Register means','Structure start','Changing element','Table start + element'],['Example','MOV AX, [BX+4]','MOV AL, [SI+10H]','MOV AX, [BX+SI+2]']],'Based = fixed field; indexed = moving element.'],
+ ['BIU vs EU',['','BIU','EU'],[['Job','Bus work: fetch, read, write, form address','Decode, execute, compute EA'],['Contains','CS DS SS ES, IP, Σ adder, 6-byte queue','ALU, AX–DX, SP BP SI DI, FLAGS, decoder'],['Nickname','Delivery department','Workshop']],'BIU brings, EU does.'],
+ ['Minimum vs maximum mode',['','Minimum','Maximum'],[['MN/MX','1 (Vcc)','0 (GND)'],['Processors','8086 only','8086 + 8087/8089'],['Control signals from','8086','8288 bus controller'],['Bus sharing','HOLD / HLDA','RQ/GT0, RQ/GT1'],['Chips','8284, 8282, 8286','+ 8288'],['Use','Small, cheap','Multiprocessor']],'Min = alone; max = with friends.'],
+ ['CF vs OF',['','CF','OF'],[['Meaning','Unsigned overflow / borrow','Signed overflow'],['7FH + 01H','0','1'],['FFH + 01H','1','0']],'C for Carry (unsigned), O for Out-of-signed-range.'],
+ ['INTR vs NMI',['','INTR','NMI'],[['Trigger','Level','Rising edge'],['Maskable','Yes (IF)','No'],['Type','Read during INTA','Always type 2'],['Use','Keyboard, timer (via 8259)','Power fail, parity error']],'NMI cannot be ignored.'],
+ ['READY vs TEST',['','READY','TEST'],[['Checked by','Hardware in T3','WAIT instruction'],['Effect','Adds Tw to the current bus cycle','EU idles until TEST = 0'],['Used for','Slow memory/I/O','Waiting for the 8087']],'READY stretches a bus cycle; TEST pauses the program.'],
+ ['HOLD/HLDA vs RQ/GT',['','HOLD / HLDA','RQ/GT0, RQ/GT1'],[['Mode','Minimum','Maximum'],['Pins','Two one-way pins','One two-way pin each'],['Handshake','Request + acknowledge levels','Three pulses: request, grant, release'],['Priority','—','RQ/GT0 higher']],'Two wires vs one wire with pulses.'],
+ ['Latch vs transceiver',['','Latch (8282/74LS373)','Transceiver (8286/74LS245)'],[['Bus','Address','Data'],['Direction','One-way','Two-way'],['Controlled by','ALE (STB)','DEN (OE), DT/R (T)'],['Why','Hold address after pins switch to data','Drive + isolate in both directions']],'Latch remembers; transceiver carries both ways.'],
+ ['SP vs BP',['','SP','BP'],[['Points to','Top of stack','A fixed spot in the stack'],['Moves','Automatically with PUSH/POP','Only when you load it'],['Use','PUSH, POP, CALL, RET','Reach parameters: [BP+4]']],'SP moves, BP stays.'],
+ ['MOV vs LEA',['','MOV BX, TABLE','LEA BX, TABLE'],[['Loads','The content of TABLE','The address (offset) of TABLE'],['Same as','—','MOV BX, OFFSET TABLE'],['With registers','—','LEA SI,[BX+DI+4] works at run time']],'MOV takes what is inside; LEA takes where it is.'],
+ ['Cache vs pipeline vs prefetch queue',['','Cache','Pipelining','Prefetch queue'],[['Idea','Keep recent data close','Overlap instruction stages','Fetch next bytes early'],['Reuses data','Yes','No','No (used once)'],['8086','None','2-stage BIU/EU','6 bytes']],'The queue is not a cache.'],
+ ['8086 vs 8051',['','8086','8051'],[['Type','Microprocessor','Microcontroller'],['Width','16-bit','8-bit'],['Address','20-bit, 1 MB','16-bit, 64 KB + 64 KB'],['Memory model','Unified + segments (VN-like)','Separate code/data (Harvard-style)'],['ISA','CISC','Generally CISC'],['Instruction length','1–6 bytes','1–3 bytes'],['Stack','SS:SP, words, grows down','Internal RAM, bytes, grows up'],['I/O, timers, UART','External chips','Built in'],['Clock','8284A ÷ 3','On-chip, 12 periods/cycle'],['Special','Strings, HLT','Bit instructions, no HLT']],'Big expandable system vs one-chip controller.']
+];
+$('#cmp-chips').innerHTML=CMP.map((c,i)=>'<button class="chip" data-c="c'+i+'">'+c[0]+'</button>').join('');
+$('#cmp-wrap').innerHTML=CMP.map((c,i)=>'<div class="card" id="c'+i+'" style="scroll-margin-top:130px"><h3>'+c[0]+'</h3><div class="tw" style="margin-top:8px"><table><tr>'+c[1].map(h=>'<th>'+h+'</th>').join('')+'</tr>'+c[2].map(r=>'<tr>'+r.map(x=>'<td>'+x+'</td>').join('')+'</tr>').join('')+'</table></div><div class="hook"><b>Hook:</b> '+c[3]+'</div></div>').join('');
+$('#cmp-chips').addEventListener('click',e=>{const b=e.target.closest('button');if(b)document.getElementById(b.dataset.c).scrollIntoView({behavior:'smooth'});});
+
+/* ---------- mode switch ---------- */
+const modeRows=[['Pin 24','INTA','QS1'],['Pin 25','ALE','QS0'],['Pin 26','DEN','S0'],['Pin 27','DT/R','S1'],['Pin 28','M/IO','S2'],['Pin 29','WR','LOCK'],['Pin 30','HLDA','RQ/GT1'],['Pin 31','HOLD','RQ/GT0']];
+function drawMode(m){$('#mode-min').hidden=m!=='min';$('#mode-max').hidden=m!=='max';
+  $$('[data-mode]').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));
+  $('#mode-table').innerHTML='<tr><th>Pin</th><th'+(m==='min'?' style="color:var(--acc)"':'')+'>Minimum</th><th'+(m==='max'?' style="color:var(--acc)"':'')+'>Maximum</th></tr>'+modeRows.map(r=>'<tr><td>'+r[0]+'</td><td class="mono">'+r[1]+'</td><td class="mono">'+r[2]+'</td></tr>').join('');}
+$$('[data-mode]').forEach(b=>b.onclick=()=>drawMode(b.dataset.mode));drawMode('min');
+
+/* ---------- timing diagram ---------- */
+function timing(){
+  const op=$('#tm-op').value, nw=+$('#tm-w').value, f=Math.max(1,+$('#tm-f').value||5);
+  const st=['T1','T2','T3'];for(let i=0;i<nw;i++)st.push('Tw');st.push('T4');
+  const W=104,x0=120,rh=38,y0=40,n=st.length,X=k=>x0+k*W;
+  const names=['CLK','ALE','AD0–AD15','RD','WR','DT/R','DEN','READY'];
+  const H=y0+names.length*rh+20, Wt=x0+n*W+20;
+  let s='<svg viewBox="0 0 '+Wt+' '+H+'" role="img" aria-label="Bus cycle timing diagram" style="min-width:'+Math.min(Wt,560)+'px;max-width:'+Math.round(Wt*1.25)+'px">';
+  st.forEach((t,k)=>{s+='<rect x="'+X(k)+'" y="18" width="'+W+'" height="'+(H-30)+'" fill="'+(t==='Tw'?'var(--acc-soft)':'none')+'" stroke="var(--line)"/><text x="'+(X(k)+W/2)+'" y="32" text-anchor="middle" class="tb">'+t+'</text>';});
+  const hi=r=>y0+r*rh+6, lo=r=>y0+r*rh+26, mid=r=>y0+r*rh+16;
+  names.forEach((nm,r)=>{s+='<text x="10" y="'+(mid(r)+4)+'" class="tm tb">'+nm+'</text>';});
+  // CLK
+  let p='M'+X(0)+' '+lo(0);st.forEach((t,k)=>{p+=' V'+hi(0)+' H'+(X(k)+W/3)+' V'+lo(0)+' H'+(X(k)+W);});s+='<path class="wave" d="'+p+'"/>';
+  // level helper: list of [xStart,level] segments
+  const lvl=(r,pts,cls)=>{let d='';pts.forEach(([x,l],i)=>{const y=l?hi(r):lo(r);d+=(i?' V'+y+' H':'M')+x+(i?'':' '+y);
+      const nx=i<pts.length-1?pts[i+1][0]:X(n);d+=' H'+nx;});s+='<path class="'+(cls||'wave')+'" d="'+d.replace(/H(\d+(\.\d+)?) H/g,'H')+'"/>';};
+  const t4=n-1;
+  lvl(1,[[X(0),0],[X(0)+W*0.15,1],[X(0)+W*0.75,0]],'wavea');
+  // AD bus
+  const busSeg=(r,x1,x2,label,z)=>{const a=hi(r),b=lo(r),m=mid(r);
+    if(z){s+='<path class="wave" stroke-dasharray="4 4" d="M'+x1+' '+m+'H'+x2+'"/>';}
+    else s+='<path class="wave" d="M'+x1+' '+m+'L'+(x1+6)+' '+a+'H'+(x2-6)+'L'+x2+' '+m+'L'+(x2-6)+' '+b+'H'+(x1+6)+'Z" fill="var(--acc2-soft)"/>';
+    s+='<text x="'+((x1+x2)/2)+'" y="'+(z?m-6:m+4)+'" text-anchor="middle" class="ts">'+label+'</text>';};
+  busSeg(2,X(0)+4,X(1)-2,'Address');
+  if(op==='r'){busSeg(2,X(1)+2,X(2)-2,'Z (float)',true);busSeg(2,X(2)+2,X(t4)+W*0.6,'Data in');}
+  else busSeg(2,X(1)+2,X(t4)+W*0.6,'Data out');
+  // RD / WR
+  if(op==='r'){lvl(3,[[X(0),1],[X(1),0],[X(t4),1]],'wavea');lvl(4,[[X(0),1]]);}
+  else{lvl(3,[[X(0),1]]);lvl(4,[[X(0),1],[X(1),0],[X(t4),1]],'wavea');}
+  lvl(5,[[X(0),op==='w'?1:0]]);
+  lvl(6,[[X(0),1],[X(1)+(op==='r'?W*0.5:0),0],[X(t4)+W*0.5,1]]);
+  if(nw>0){lvl(7,[[X(0),1],[X(2)+W*0.2,0],[X(2+nw)+W*0.2,1]],'wavea');}else lvl(7,[[X(0),1]]);
+  s+='<text x="'+(X(2)+W/2)+'" y="'+(lo(7)+16)+'" text-anchor="middle" class="ts ta">sampled in T3</text>';
+  s+='</svg>';$('#tm-fig').innerHTML=s;
+  const T=1000/f;
+  $('#tm-out').innerHTML='T = 1/'+f+' MHz = <span class="hi">'+T.toFixed(1)+' ns</span> · states = '+n+' → bus cycle = '+n+' × '+T.toFixed(1)+' = <span class="hi">'+(n*T).toFixed(1)+' ns</span>'+(op==='r'?'\nRead: DT/R = 0 (receive), RD low T2→T4, AD floats in T2 so memory can drive it.':'\nWrite: DT/R = 1 (transmit), WR low T2→T4, CPU drives data from T2 (no float).');
+}
+['tm-op','tm-w','tm-f'].forEach(id=>$('#'+id).addEventListener('input',timing));timing();
+
+/* ---------- decoder solver ---------- */
+function decode(){
+  const size=+$('#dc-size').value, k=Math.round(Math.log2(size));
+  const starts=$('#dc-starts').value.split(',').map(ph).filter(v=>!isNaN(v));
+  const out=$('#dc-out');
+  if(!starts.length){out.innerHTML='<span class="no">Enter at least one start address in hex.</span>';return;}
+  for(const a of starts){if(a%size){out.innerHTML='<span class="no">'+hx(a,5)+'H is not a multiple of the chip size ('+hx(size,5)+'H). A chip must start on a boundary of its own size.</span>';$('#dc-fig').innerHTML='';$('#dc-table').innerHTML='';return;}
+    if(a+size>0x100000){out.innerHTML='<span class="no">'+hx(a,5)+'H + chip size runs past FFFFFH.</span>';return;}}
+  const w=20-k, sel=[k,k+1,k+2].filter(b=>b<20), en=[];for(let b=k+3;b<20;b++)en.push(b);
+  const up=starts.map(a=>a>>k);
+  const fixed=[];for(const b of en){const v=(starts[0]>>b)&1;if(starts.some(a=>((a>>b)&1)!==v)){out.innerHTML='<span class="no">The chips differ in A'+b+', which is above the 3 select bits. They cannot share one 74LS138: use a second decoder or smaller chips.</span>';$('#dc-fig').innerHTML='';return;}fixed.push([b,v]);}
+  const idx=starts.map(a=>(a>>k)&7);
+  if(new Set(idx).size!==idx.length){out.innerHTML='<span class="no">Two chips overlap: they land on the same decoder output.</span>';return;}
+  // enables
+  const ones=fixed.filter(f=>f[1]===1).map(f=>'A'+f[0]), zeros=fixed.filter(f=>f[1]===0).map(f=>'A'+f[0]);
+  let G1='+5 V (Vcc)', G2=[], notes=[];
+  const o=ones.slice();if(o.length){G1=o.shift();}
+  zeros.forEach(z=>G2.push(z));o.forEach(x=>G2.push('NOT '+x));
+  let G2A='GND',G2B='GND';
+  if(G2.length===1)G2A=G2[0];else if(G2.length===2){G2A=G2[0];G2B=G2[1];}
+  else if(G2.length>2){G2A=G2[0];G2B=G2.slice(1).join(' OR ');notes.push('More than two active-low enables: combine the extras with an OR gate into G2B.');}
+  // table
+  let tb='<table><tr>';for(let b=19;b>=0;b--)tb+='<th class="mono" style="padding:4px 3px'+(b===k-1?';border-left:2px solid var(--acc)':'')+'">A'+b+'</th>';tb+='<th>Address</th></tr>';
+  starts.forEach(a=>{[a,a+size-1].forEach(v=>{tb+='<tr>';for(let b=19;b>=0;b--){const bit=(v>>b)&1;const isSel=sel.includes(b),isEn=en.includes(b);
+      tb+='<td class="mono" style="padding:4px 3px;text-align:center;'+(isSel?'background:var(--acc2-soft);':isEn?'background:var(--acc-soft);':'')+(b===k-1?'border-left:2px solid var(--acc)':'')+'">'+bit+'</td>';}
+    tb+='<td class="mono">'+hx(v,5)+'H</td></tr>';});});
+  tb+='</table><div class="legend"><span><i style="background:var(--acc-soft);border:1px solid var(--acc)"></i>fixed bits → enables</span><span><i style="background:var(--acc2-soft);border:1px solid var(--acc2)"></i>select bits → C B A</span><span>right of the orange line → A0–A'+(k-1)+' to every chip</span></div>';
+  $('#dc-table').innerHTML=tb;
+  out.innerHTML='Chip size '+(size/1024)+' KB = 2^'+k+' → <span class="hi">A0–A'+(k-1)+'</span> to every chip · decoded bits A'+k+'–A19\n'+
+    'Select: A = A'+sel[0]+(sel[1]!=null?', B = A'+sel[1]:'')+(sel[2]!=null?', C = A'+sel[2]:'')+'\n'+
+    'Enables: G1 = <span class="hi">'+G1+'</span> · G2A = <span class="hi">'+G2A+'</span> · G2B = <span class="hi">'+G2B+'</span>\n'+
+    starts.map((a,i)=>'Chip '+(i+1)+': '+hx(a,5)+'H–'+hx(a+size-1,5)+'H → CBA = '+idx[i].toString(2).padStart(3,'0')+' → <span class="hi">Y'+idx[i]+' → CS of chip '+(i+1)+'</span>').join('\n')+(notes.length?'\n'+notes.join('\n'):'');
+  // SVG
+  const ins=[['A'+sel[0],'A (LSB)',100],['A'+sel[1],'B',136],['A'+sel[2],'C',172],[G1,'G1 (high)',240],[G2A,'G2A (low)',284],[G2B,'G2B (low)',320]];
+  let s='<svg viewBox="0 0 760 380" role="img" aria-label="74LS138 decoder wiring" style="min-width:600px">';
+  s+='<rect class="bx" x="300" y="60" width="170" height="296" rx="8"/><text x="385" y="214" text-anchor="middle" class="tb">74LS138</text>';
+  ins.forEach(([sig,pin,y])=>{s+='<path class="ln" d="M200 '+y+'H298" marker-end="url(#ar)"/><text x="192" y="'+(y+4)+'" text-anchor="end" class="tm tb">'+sig+'</text><text x="310" y="'+(y+4)+'" class="ts">'+pin+'</text>';});
+  s+='<text x="24" y="140" class="ts">select</text><text x="24" y="288" class="ts">enables</text>';
+  const chips=starts.map((a,i)=>({a,i,o:idx[i]}));
+  for(let o=0;o<8;o++){const y=84+o*36;const c=chips.find(c=>c.o===o);
+    s+='<text x="460" y="'+(y+4)+'" text-anchor="end" class="ts'+(c?' ta':'')+'">Y'+o+'</text>';
+    if(c){const by=Math.max(60,Math.min(300,y-22));s+='<path class="lna" d="M470 '+y+'H520V'+(by+22)+'H540"/><rect class="bxa" x="540" y="'+by+'" width="200" height="44" rx="7"/><text x="554" y="'+(by+19)+'" class="tb">Chip '+(c.i+1)+' CS</text><text x="554" y="'+(by+36)+'" class="ts">'+hx(c.a,5)+'H–'+hx(c.a+size-1,5)+'H</text>';}
+    else s+='<path class="lnd" d="M470 '+y+'H492"/>';}
+  s+='<text x="24" y="372" class="ts">An output goes low only when G1 = 1, G2A = G2B = 0 and CBA equals its number. All chips also get A0–A'+(k-1)+', the data bus, MRDC→OE, MWTC→WE.</text></svg>';
+  $('#dc-fig').innerHTML=s;
+}
+$('#dc-go').onclick=decode;$('#dc-starts').addEventListener('keydown',e=>{if(e.key==='Enter')decode();});$('#dc-size').onchange=decode;decode();
+
+/* ---------- banks ---------- */
+function banks(){const a=ph($('#bk-a').value),w=$('#bk-s').value==='w';const out=$('#bk-out');
+  if(isNaN(a)){out.innerHTML='<span class="no">Enter a hex address.</span>';return;}
+  const odd=a&1;let ev=false,od=false,cycles=1,txt='';
+  if(!w){if(odd){od=true;txt='Byte at odd address → BHE = 0, A0 = 1 → high bank, D15–D8, 1 bus cycle.';}else{ev=true;txt='Byte at even address → BHE = 1, A0 = 0 → low bank, D7–D0, 1 bus cycle.';}}
+  else if(!odd){ev=od=true;txt='Word at even address (aligned) → BHE = 0, A0 = 0 → both banks at once, 1 bus cycle.';}
+  else{ev=od=true;cycles=2;txt='Word at odd address (misaligned) → cycle 1: odd byte '+hx(a,5)+'H on D15–D8 (BHE = 0, A0 = 1); cycle 2: even byte '+hx(a+1,5)+'H on D7–D0 (BHE = 1, A0 = 0) → 2 bus cycles.';}
+  let s='<svg viewBox="0 0 560 170" role="img" aria-label="Even and odd memory banks" style="min-width:460px">';
+  s+='<rect class="'+(ev?'bxa':'bx')+'" x="20" y="20" width="240" height="90" rx="8"/><text x="140" y="48" text-anchor="middle" class="tb">Even (low) bank</text><text x="140" y="70" text-anchor="middle" class="ts">A0 = 0 selects · D7–D0</text><text x="140" y="92" text-anchor="middle" class="ts tm">…0, …2, …4</text>';
+  s+='<rect class="'+(od?'bxa':'bx')+'" x="300" y="20" width="240" height="90" rx="8"/><text x="420" y="48" text-anchor="middle" class="tb">Odd (high) bank</text><text x="420" y="70" text-anchor="middle" class="ts">BHE = 0 selects · D15–D8</text><text x="420" y="92" text-anchor="middle" class="ts tm">…1, …3, …5</text>';
+  s+='<text x="280" y="150" text-anchor="middle" class="ta">'+cycles+' bus cycle'+(cycles>1?'s':'')+'</text></svg>';
+  $('#bk-fig').innerHTML=s;out.textContent=txt;}
+['bk-a','bk-s'].forEach(id=>$('#'+id).addEventListener('input',banks));banks();
+
+/* ---------- pipeline ---------- */
+const PP={
+ seq:{rows:[['CPU',['F1','E1','F2','E2','F3','E3','F4','E4']]],txt:'One unit does everything in turn: 4 instructions finish in 8 slots.'},
+ pipe:{rows:[['BIU fetch',['F1','F2','F3','F4','F5','F6','F7','F8']],['EU execute',['','E1','E2','E3','E4','E5','E6','E7']]],txt:'BIU fetches the next instruction while the EU executes the current one: after the first slot one instruction finishes every slot (7 in 8 slots).'},
+ flush:{rows:[['BIU fetch',['F1','F2 JMP','F3','F T1','F T2','F T3','F T4','F T5']],['EU execute',['','E1','E JMP','wait','E T1','E T2','E T3','E T4']]],txt:'I2 is a taken JMP. F3 was fetched from the wrong place, so it is discarded (flush) and the BIU refills from the target T1. The EU waits one slot (bubble). A not-taken branch causes no flush.'}};
+function pipe(m){$$('[data-pp]').forEach(b=>b.classList.toggle('on',b.dataset.pp===m));const d=PP[m];
+  let h='<div class="pipe" style="grid-template-columns:100px repeat(8,1fr)"><div class="h"></div>'+[1,2,3,4,5,6,7,8].map(i=>'<div class="h">t'+i+'</div>').join('');
+  d.rows.forEach(([n,c])=>{h+='<div class="h" style="text-align:left">'+n+'</div>'+c.map(x=>{let cl='';if(!x)return '<div class="h"></div>';
+    if(m==='flush'&&x==='F3')cl='x';else if(x==='wait')cl='b';else if(x[0]==='F')cl='f';else cl='e';return '<div class="'+cl+'">'+x+'</div>';}).join('');});
+  $('#pp-grid').innerHTML=h+'</div>';$('#pp-out').textContent=d.txt;}
+$$('[data-pp]').forEach(b=>b.onclick=()=>pipe(b.dataset.pp));pipe('seq');
+
+/* ---------- PA calc ---------- */
+function pa(){const s=ph($('#pa-s').value),o=ph($('#pa-o').value);
+  if(isNaN(s)||isNaN(o)||s>0xFFFF||o>0xFFFF){$('#pa-out').innerHTML='<span class="no">Segment and offset must be 4-digit hex (0000–FFFF).</span>';$('#pa-grid').innerHTML='';return;}
+  const p=(s*16+o),P=p&0xFFFFF;const S=hx(s,4),O=hx(o,4),Sh=hx(s*16,5),R=hx(P,5);
+  const cell=(ch,c)=>'<div class="c '+(c||'')+'">'+ch+'</div>';
+  $('#pa-grid').innerHTML='<div class="hexgrid"><div class="l">Segment</div>'+cell('','e')+S.split('').map(c=>cell(c)).join('')+
+    '<div class="l">× 10H</div>'+Sh.split('').map((c,i)=>cell(c,i===4?'z':'')).join('')+
+    '<div class="l">+ Offset</div>'+cell('','e')+O.split('').map(c=>cell(c)).join('')+
+    '<div class="l">= PA</div>'+R.split('').map(c=>cell(c,'r')).join('')+'</div>';
+  $('#pa-out').innerHTML=S+'0H + '+O+'H = <span class="hi">'+R+'H</span>'+(p>0xFFFFF?'\n(result passed FFFFFH and wrapped around: the 8086 drops the 21st bit)':'')+'\nSegment range: '+Sh+'H – '+hx(s*16+0xFFFF,5)+'H';}
+['pa-s','pa-o'].forEach(id=>$('#'+id).addEventListener('input',pa));pa();
+
+/* ---------- EA calc ---------- */
+function ea(){const g=id=>ph($('#'+id).value);const b=$('#ea-b').value,i=$('#ea-i').value,ov=$('#ea-o').value;
+  const d=$('#ea-d').value.trim()===''?0:g('ea-d');const R={BX:g('r-bx'),BP:g('r-bp'),SI:g('r-si'),DI:g('r-di'),DS:g('r-ds'),SS:g('r-ss'),ES:g('r-es'),CS:g('r-cs')};
+  const src=g('ea-src');const out=$('#ea-out');
+  if(Object.values(R).some(isNaN)||isNaN(d)||isNaN(src)){out.innerHTML='<span class="no">All values must be hex.</span>';return;}
+  if(b==='none'&&i==='none'&&d===0){out.innerHTML='<span class="no">Pick a register or a displacement.</span>';return;}
+  let mode;if(b==='none'&&i==='none')mode='Direct';else if(b!=='none'&&i!=='none')mode='Based-indexed'+(d?' + displacement':'');
+  else if(d===0)mode='Register indirect';else mode=b!=='none'?'Based':'Indexed';
+  const parts=[];if(b!=='none')parts.push(b+' ('+hx(R[b],4)+'H)');if(i!=='none')parts.push(i+' ('+hx(R[i],4)+'H)');if(d||parts.length===0)parts.push(hx(d,4)+'H');
+  const E=((b!=='none'?R[b]:0)+(i!=='none'?R[i]:0)+d)&0xFFFF;
+  const defSeg=b==='BP'?'SS':'DS';const seg=ov==='none'?defSeg:ov;const P=(R[seg]*16+E)&0xFFFFF;
+  const asm='MOV ['+[b,i].filter(x=>x!=='none').concat(d?[hx(d,2)+'H']:[]).join(' + ')+'], AX';
+  out.innerHTML=(ov!=='none'?ov+':':'')+asm+'\nMode: <span class="hi">'+mode+'</span>\n'+
+   '1) EA = '+parts.join(' + ')+' = <span class="hi">'+hx(E,4)+'H</span>\n'+
+   '2) Segment: '+(ov!=='none'?'override → '+seg:(b==='BP'?'BP is used → SS':'no BP → DS'))+' = '+hx(R[seg],4)+'H\n'+
+   '3) PA = '+hx(R[seg],4)+'0H + '+hx(E,4)+'H = <span class="hi">'+hx(P,5)+'H</span>\n'+
+   '4) Store AX = '+hx(src,4)+'H little-endian:\n   ['+hx(P,5)+'H] ← <span class="hi">'+hx(src&255,2)+'H</span> (AL)\n   ['+hx((P+1)&0xFFFFF,5)+'H] ← <span class="hi">'+hx(src>>8,2)+'H</span> (AH)\n   Registers and flags do not change.';}
+['ea-b','ea-i','ea-d','ea-o','ea-src','r-bx','r-bp','r-si','r-di','r-ds','r-ss','r-es','r-cs'].forEach(id=>$('#'+id).addEventListener('input',ea));ea();
+
+/* ---------- flags ---------- */
+function flags(){const a=ph($('#fl-a').value),b=ph($('#fl-b').value),op=$('#fl-op').value,w=+$('#fl-w').value;const out=$('#fl-out');
+  const M=w===8?0xFF:0xFFFF,sb=w===8?0x80:0x8000;if(isNaN(a)||isNaN(b)||a>M||b>M){out.innerHTML='<span class="no">Enter hex values that fit in '+w+' bits.</span>';return;}
+  let r,CF,AF,OF;if(op==='add'){r=a+b;CF=r>M;AF=((a&15)+(b&15))>15;r&=M;OF=!!((~(a^b))&(a^r)&sb);}else{r=(a-b)&M;CF=a<b;AF=(a&15)<(b&15);OF=!!((a^b)&(a^r)&sb);}
+  const ZF=r===0,SF=!!(r&sb);let ones=0;for(let x=r&255;x;x>>=1)ones+=x&1;const PF=ones%2===0;const dg=w/4;
+  const sgn=v=>v&sb?v-(M+1):v;const f=(n,v,why)=>n+' = '+(v?'<span class="hi">1</span>':'0')+'  '+why;
+  out.innerHTML=hx(a,dg)+'H '+(op==='add'?'+':'−')+' '+hx(b,dg)+'H = <span class="hi">'+hx(r,dg)+'H</span>   (signed: '+sgn(a)+' '+(op==='add'?'+':'−')+' '+sgn(b)+' → '+sgn(r)+')\n'+
+   f('CF',CF,op==='add'?'unsigned '+a+' + '+b+(CF?' > '+M:' ≤ '+M):(CF?'borrow: '+a+' < '+b:'no borrow'))+'\n'+
+   f('ZF',ZF,'result '+(ZF?'is':'is not')+' zero')+'\n'+f('SF',SF,'top bit = '+(SF?1:0))+'\n'+
+   f('OF',OF,OF?'signed result left the range':'signed result fits')+'\n'+f('PF',PF,'low byte has '+ones+' ones ('+(PF?'even':'odd')+')')+'\n'+f('AF',AF,'carry/borrow at bit 3 '+(AF?'yes':'no'));}
+['fl-a','fl-b','fl-op','fl-w'].forEach(id=>$('#'+id).addEventListener('input',flags));flags();
+
+/* ---------- pipeline / cache / clock ---------- */
+function perf(){const k=+$('#pl-k').value,n=+$('#pl-n').value,t=+$('#pl-t').value;
+  if(k>0&&n>0&&t>0){const s=n*k*t,p=(k+n-1)*t;$('#pl-out').innerHTML='Sequential = n·k·t = '+n+'×'+k+'×'+t+' = <span class="hi">'+s+'</span>\nPipelined = (k+n−1)·t = ('+k+'+'+n+'−1)×'+t+' = <span class="hi">'+p+'</span>\nSaved = <span class="hi">'+(s-p)+'</span> · speed-up = '+(s/p).toFixed(2);}
+  const h=+$('#ca-h').value,c=+$('#ca-c').value,m=+$('#ca-m').value;
+  if(h>=0&&h<=1){const av=h*c+(1-h)*m;$('#ca-out').innerHTML='t_avg = '+h+'×'+c+' + '+(1-h).toFixed(2)+'×'+m+' = <span class="hi">'+av.toFixed(2)+' ns</span> (vs '+m+' ns without cache)';}else $('#ca-out').innerHTML='<span class="no">Hit rate must be 0 to 1.</span>';
+  const f=+$('#ck-f').value,ns=+$('#ck-n').value,wn=+$('#ck-w').value,N=+$('#ab-n').value;
+  let o='';if(f>0){const T=1000/f;o+='T = 1/'+f+' MHz = <span class="hi">'+T.toFixed(1)+' ns</span>\n('+ns+' + '+wn+' wait) × '+T.toFixed(1)+' = <span class="hi">'+((ns+wn)*T).toFixed(1)+' ns</span>\n';}
+  if(N>0&&N<=40){const L=Math.pow(2,N);const u=L>=1048576?(L/1048576)+' MB':L>=1024?(L/1024)+' KB':L+' B';o+=N+' address lines → 2^'+N+' = <span class="hi">'+L.toLocaleString('en-US')+'</span> locations = '+u;}
+  $('#ck-out').innerHTML=o;}
+['pl-k','pl-n','pl-t','ca-h','ca-c','ca-m','ck-f','ck-n','ck-w','ab-n'].forEach(id=>$('#'+id).addEventListener('input',perf));perf();
+
+/* ---------- stack simulator ---------- */
+let S={};const stk=[];
+function stLoad(){S={SS:ph($('#st-ss').value),SP:ph($('#st-sp').value),AX:ph($('#st-ax').value),BX:ph($('#st-bx').value),CS:ph($('#st-cs').value),IP:ph($('#st-ip').value),FL:ph($('#st-fl').value)};S.SP0=S.SP;stk.length=0;
+  if(Object.values(S).some(isNaN)){$('#st-log').innerHTML='<span class="no">All values must be hex.</span>';return;}
+  $('#st-log').innerHTML='Loaded. Top of stack = SS×10H + SP = '+hx(S.SS,4)+'0H + '+hx(S.SP,4)+'H = <span class="hi">'+hx(S.SS*16+S.SP,5)+'H</span>';stDraw();}
+const PAof=sp=>hx((S.SS*16+sp)&0xFFFFF,5)+'H';
+function stDraw(){let h='<table class="stk"><tr><th>Offset (SP)</th><th>Physical</th><th>Word</th><th>Bytes (low, high)</th><th>What</th></tr>';
+  if(!stk.length)h+='<tr><td colspan="5">Stack empty (SP = '+hx(S.SP,4)+'H)</td></tr>';
+  stk.slice().reverse().forEach((e,i)=>{h+='<tr class="'+(i===0?'top':'')+'"><td>'+hx(e.sp,4)+'H'+(i===0?' ← SP':'')+'</td><td>'+PAof(e.sp)+'</td><td>'+hx(e.v,4)+'H</td><td>'+hx(e.v&255,2)+'H, '+hx(e.v>>8,2)+'H</td><td>'+e.n+'</td></tr>';});
+  $('#st-mem').innerHTML=h+'</table><p class="sub">AX = '+hx(S.AX,4)+'H · BX = '+hx(S.BX,4)+'H · CS:IP = '+hx(S.CS,4)+':'+hx(S.IP,4)+' · FLAGS = '+hx(S.FL,4)+'H · SP = '+hx(S.SP,4)+'H</p>';}
+function push(v,n){S.SP=(S.SP-2)&0xFFFF;stk.push({sp:S.SP,v,n});return 'SP − 2 = '+hx(S.SP,4)+'H, ['+PAof(S.SP)+'] ← '+hx(v&255,2)+'H, ['+hx((S.SS*16+S.SP+1)&0xFFFFF,5)+'H] ← '+hx(v>>8,2)+'H ('+n+')';}
+function pop(){if(!stk.length)return null;const e=stk.pop();S.SP=(S.SP+2)&0xFFFF;return e;}
+$$('[data-st]').forEach(b=>b.onclick=()=>{const a=b.dataset.st;let msg='';
+  if(a==='pushax')msg='PUSH AX: '+push(S.AX,'AX');else if(a==='pushbx')msg='PUSH BX: '+push(S.BX,'BX');
+  else if(a==='popax'||a==='popbx'){const e=pop();if(!e)msg='Stack is empty: nothing to pop.';else{const r=a==='popax'?'AX':'BX';S[r]=e.v;msg='POP '+r+': '+r+' ← '+hx(e.v,4)+'H, SP + 2 = '+hx(S.SP,4)+'H';}}
+  else if(a==='int'){msg='Interrupt acknowledged:\n  '+push(S.FL,'FLAGS')+'\n  '+push(S.CS,'CS')+'\n  '+push(S.IP,'IP')+'\nSP dropped by 6. Top of stack = <span class="hi">'+PAof(S.SP)+'</span>, word on top = <span class="hi">'+hx(S.IP,4)+'H (old IP)</span>. IF and TF cleared.';}
+  else if(a==='iret'){const n=stk.slice(-3).map(e=>e.n).join(',');if(n!=='FLAGS,CS,IP')msg='IRET needs IP, CS, FLAGS on top (interrupt first).';else{S.IP=pop().v;S.CS=pop().v;S.FL=pop().v;msg='IRET: pop IP, CS, FLAGS. SP back to '+hx(S.SP,4)+'H.';}}
+  $('#st-log').innerHTML=msg;stDraw();});
+$('#st-load').onclick=stLoad;stLoad();
+
+/* ---------- questions ---------- */
+const Q=[
+ ['lec','Lecture revision','Lecture 1 tutorial / revision slide (15 questions)',[
+  ['What are the main functional units of a computer?','List the five boxes of the block diagram.','Input, output, memory, ALU and control unit. ALU + control unit + registers form the CPU.'],
+  ['Architecture vs organization?','What the programmer sees vs how it is built.','Architecture: instruction set, registers, addressing modes, data types. Organization: control signals, buses, timing, memory technology. 8086 and 8088 share architecture, differ in organization (16-bit vs 8-bit external bus).'],
+  ['ALU vs control unit?','Calculator vs coordinator.','ALU performs arithmetic/logic and sets flags. Control unit fetches, decodes and generates control signals that tell every block what to do and when.'],
+  ['Roles of PC, IR, MAR, MDR?','Follow one fetch.','PC = address of next instruction · MAR = address sent to memory · MDR = data received from/sent to memory · IR = instruction being decoded.'],
+  ['Why is a tri-state buffer needed on a shared bus?','Only one talker at a time.','Unselected devices go to high impedance (Z) and disconnect, so only the selected one drives the bus. Without it two outputs fight (bus contention).'],
+  ['What determines the maximum addressable memory?','Count the address lines.','The address bus width: N lines → 2^N locations. 8086: 20 lines → 1 MB.'],
+  ['Explain fetch, decode, execute with hardware blocks.','PC → MAR → memory → MDR → IR → CU → ALU.','Fetch: PC → MAR → address bus, RD asserted, instruction → MDR → IR, PC advances. Decode: CU reads IR opcode, finds operands. Execute: operands go to ALU, result written to register/memory, flags updated.'],
+  ['What is the purpose of the stack?','LIFO scratch area.','Temporary storage (PUSH/POP), saving registers, holding return addresses for CALL/RET and the FLAGS/CS/IP during interrupts, passing parameters.'],
+  ['Immediate vs indirect addressing?','Where is the value?','Immediate: the value is inside the instruction (MOV AX, 0025H). Indirect: a register holds the address of the value (MOV AL, [BX]).'],
+  ['Machine vs assembly language?','Binary vs mnemonics.','Machine language is binary the CPU executes directly (B0 05). Assembly writes the same instruction as a mnemonic (MOV AL, 05H); an assembler translates one-to-one.'],
+  ['Memory-mapped vs I/O-mapped I/O?','Shared or separate address space.','Memory-mapped: devices in the memory map, any MOV, uses memory addresses. I/O-mapped: separate port space, IN/OUT, needs M/IO, no memory lost.'],
+  ['Serial vs parallel transfer?','One wire vs many.','Parallel sends many bits at once on many lines: fast, short distance. Serial sends one bit at a time: few wires, long distance, needs a protocol/baud rate.'],
+  ['What is a cache hit?','Found in the fast memory.','The requested item is already in the cache, so it is read quickly without going to main memory. A miss fetches from main memory and copies into cache.'],
+  ['How does pipelining increase throughput?','Overlap.','Stages of different instructions run at the same time, so after the pipe fills one instruction completes every stage time. A single instruction is not faster.'],
+  ['Why must the 8086 queue be flushed after some branches?','Prefetched bytes follow the old path.','A taken jump/CALL/RET changes CS:IP; bytes already in the queue are from the wrong place, so the BIU clears the queue and refills from the target. Not-taken branches do not flush.']]],
+ ['cls','Classification revision','Architecture classification slide (17 questions)',[
+  ['Von Neumann vs Harvard?','Memory organization.','VN: one memory and path for code and data. Harvard: separate program and data memories with separate paths.'],
+  ['What is the Von Neumann bottleneck?','Shared road.','Instruction fetches and data accesses compete for the same memory path, so memory bandwidth limits performance.'],
+  ['Why can Harvard access code and data independently?','Two roads.','Separate memories and buses, so a fetch and a data read can occur in the same cycle.'],
+  ['What is modified Harvard?','Harvard inside, VN outside.','One unified main memory seen by software, but separate instruction and data caches in the CPU (x86, ARM).'],
+  ['What is CISC?','Complex instruction set computer.','Rich instruction set, many addressing modes, variable length, memory operands, complex (often microcoded) decoding, high code density.'],
+  ['What is RISC?','Reduced instruction set computer.','Simple, regular, often fixed-length instructions, few addressing modes, load/store, many registers, easy decoding and pipelining.'],
+  ['Why are RISC instructions more regular?','For simple hardware.','Fixed size and fixed field positions make fetch and decode simple and fast, and every pipeline stage does similar work.'],
+  ['Why do RISC designs use many registers?','Avoid memory trips.','Only LOAD/STORE touch memory, so values stay in registers; registers are faster and predictable, fewer memory accesses.'],
+  ['Why are fixed formats useful for pipelining?','Each stage does equal work.','IF always fetches one instruction, ID decodes in one stage, register fields are at fixed bit positions → a new instruction every clock.'],
+  ['Why are CISC instructions variable length?','Pay only for what is needed.','Length depends on operand count, addressing mode, displacement and immediate data; simple instructions stay short (8086: 1–6 bytes).'],
+  ['What is code density?','Bytes per program.','How much memory a program needs. CISC is denser: C = A + B is about 10 bytes on 8086 vs 16 on a 32-bit RISC.'],
+  ['What is a pipeline bubble?','Empty slot.','A cycle where a stage does no useful work because it must wait (data dependency, branch, memory delay, resource conflict).'],
+  ['Why is the 8086 CISC?','Check the CISC list.','Rich set (MOVSB, LOOP), many addressing modes ([BX+DI+4]), 1–6 byte instructions, memory operands in ordinary instructions.'],
+  ['Why is the 8051 generally CISC?','Same check.','Specialized instructions (DJNZ, MUL AB, DA A), several addressing modes, 1–3 byte instructions, memory and bit operations, accumulator-centred.'],
+  ['Why is the 8051 Harvard-style?','Two address spaces.','Program memory and data memory are separate spaces with different instructions and strobes (MOVC/PSEN vs MOV, MOVX/RD/WR); code 0100H ≠ data 0100H.'],
+  ['Why does Harvard not mean RISC?','Different axes.','Harvard describes memory organization; RISC describes the instruction set. 8051 is Harvard-style yet CISC.'],
+  ['Why does Von Neumann not mean CISC?','Different axes.','A simple RISC model can use one unified memory. The 8086 happens to be VN + CISC, but the properties are independent.']]],
+ ['num','Numerical exercises','Lecture 1 numerical and design exercises',[
+  ['16-bit address bus: how many locations?','2^N.','2^16 = 65,536 locations (64 KB).'],
+  ['20-bit address bus: maximum space?','2^N.','2^20 = 1,048,576 = 1 MB.'],
+  ['Clock 5 MHz: period?','T = 1/f.','T = 1/5 MHz = 200 ns.'],
+  ['Instruction takes 4 clocks at 5 MHz: time?','cycles × T.','4 × 200 ns = 800 ns.'],
+  ['8086: CS = 1234H, IP = 0100H. Physical address?','Append 0, add.','12340H + 0100H = 12440H.'],
+  ['EA for BX = 1000H, DI = 0020H, disp = 0004H?','Add the three.','EA = 1000H + 0020H + 0004H = 1024H.'],
+  ['Draw a basic decoder that selects ROM, RAM and I/O.','Use the top address bits.','2-to-4 decoder on A15 A14: 00 → ROM (0000–3FFFH), 01 → RAM (4000–7FFFH), 10 → I/O (8000–BFFFH), 11 unused. A13–A0 go to every chip. See Circuits → decoder.'],
+  ['What happens if two devices drive a shared bus at once?','Contention.','Undefined level, wrong value read, large current from one output into the other, heating, unreliable operation, possible damage. Prevent with one chip select at a time and tri-state outputs.'],
+  ['DS = 2000H, offset = 0150H: physical address?','Append 0, add.','20000H + 0150H = 20150H.']]],
+ ['rev','8086 revision lecture','8086 REV. Lecture (30 short + 8 long + 4 addressing)',[
+  ['How much memory can the 8086 address and with how many lines?','2^20.','1 MB with a 20-bit address bus.'],
+  ['Which unit forms physical addresses and controls external buses?','Bus work.','The BIU.'],
+  ['Instruction queue size?','','6 bytes.'],
+  ['Default segment for MOV AX,[BP+06H]?','BP brings the Stack.','SS.'],
+  ['Which signal makes latches capture the multiplexed address?','','ALE.'],
+  ['Level on MN/MX for maximum mode?','Max = ground.','Logic 0 (GND).'],
+  ['Which device decodes S2 S1 S0 in max mode?','','The 8288 bus controller.'],
+  ['Which input inserts wait states?','','READY when sampled low.'],
+  ['Which input does WAIT test for the 8087?','','TEST, connected to the 8087 BUSY output.'],
+  ['Bus cycles for an aligned 16-bit word?','Even address.','One bus cycle.'],
+  ['Max-mode status for memory read?','Memory side starts with 1.','S2 S1 S0 = 101 → 8288 activates MRDC.'],
+  ['QS1 QS0 = 01 means?','','First byte of an opcode taken from the queue.'],
+  ['Which request/grant line has higher priority?','','RQ/GT0.'],
+  ['Physical address for 1234H:0100H?','','12340H + 0100H = 12440H.'],
+  ['Which pair locates the next instruction?','','CS:IP.'],
+  ['One function each for address, data, control bus.','Where, what, when.','Address selects a location; data carries operands/instruction bytes; control identifies and times read, write, enable, acknowledge.'],
+  ['Why are AD0–AD15 multiplexed?','Pin count.','The 40-pin package reuses pins: A0–A15 in T1, D0–D15 in the data part of the cycle.'],
+  ['Fetch and decode sequence from memory to execution?','BIU then EU.','BIU forms CS:IP, fetches bytes into the queue, advances IP. EU takes bytes, decodes, computes EA, asks BIU for a transfer if the operand is in memory/I/O.'],
+  ['Distinguish CF from OF.','Unsigned vs signed.','CF = unsigned carry/borrow. OF = signed result out of range.'],
+  ['Why latches on address and transceivers on data?','One-way vs two-way.','Latches keep the address after the pins switch to data. Transceivers give drive strength, isolate the CPU, and work in both directions.'],
+  ['MOV AL,[SI], DS = 2400H, SI = 0130H: PA?','','24000H + 0130H = 24130H.'],
+  ['MOV AX,[BP+DI+20H], BP = 0100H, DI = 0020H, SS = 3000H: EA, PA?','BP → SS.','EA = 0100H + 0020H + 0020H = 0140H; PA = 30000H + 0140H = 30140H.'],
+  ['Word at 42001H: how many bus cycles?','Odd address.','Two: the bytes are in different banks (misaligned).'],
+  ['8 MHz, memory read with one wait state: duration?','(4 + Tw) × T.','T = 125 ns; T1+T2+T3+Tw+T4 = 5 states → 625 ns.'],
+  ['First physical address after RESET?','CS = FFFFH, IP = 0.','FFFF0H.'],
+  ['Correct MOV [BX],[SI] and MOV CS,AX.','No mem-mem; CS not a destination.','MOV AL,[SI] then MOV [BX],AL. CS changes only with far JMP, far CALL, RETF, INT, IRET.'],
+  ['Trace MOV AX,FFFFH; ADD AX,0001H.','Wrap to zero.','AX = 0000H, ZF = 1, CF = 1.'],
+  ['8086 + 8087 system: mode and extra device?','Coprocessor → max.','Maximum mode with an 8288 bus controller.'],
+  ['Status code and 8288 command for I/O write?','I/O side = 0xx.','S2 S1 S0 = 010 → IOWC and AIOWC.'],
+  ['READY = 0 vs WAIT with TEST = 1?','Bus cycle vs program.','READY = 0 stretches the current bus cycle with Tw states. WAIT checks TEST in the program; the EU idles while TEST = 1 (waiting for the coprocessor), bus timing unchanged.'],
+  ['Draw BIU/EU and place every block.','Bus work vs execution.','BIU: CS, DS, SS, ES, IP, 6-byte queue, address adder, bus control. EU: ALU, AX–DX, SP BP SI DI, FLAGS, decoder/control. See the chain step 7 picture.'],
+  ['What do AD0–AD15 carry in T1 and T2–T4?','','T1: A0–A15. T2–T4: D0–D15 (or Z while floating in a read).'],
+  ['Purpose of BHE and A0?','Two banks.','A0 = 0 selects the even (low) bank; BHE = 0 selects the odd (high) bank; both low = whole aligned word.'],
+  ['Next instruction for CS = 2B00H, IP = 0450H?','','2B000H + 0450H = 2B450H.'],
+  ['Signals that enable and set direction of transceivers?','','DEN enables; DT/R selects transmit (1) or receive (0).'],
+  ['INTR vs NMI: triggering, masking, vector?','','INTR: level, maskable by IF, type read during INTA. NMI: rising edge, not maskable, always type 2.'],
+  ['Why is the 8284A needed and what does it give the 8086?','No internal oscillator.','It supplies CLK (crystal ÷ 3, 33% duty) and synchronized RESET and READY.'],
+  ['Why does a taken branch reduce prefetch benefit?','Wrong bytes in queue.','The branch jumps to a target, so the sequential bytes in the queue are useless; the queue is flushed and refilled, and execution waits during the refill. Example JZ TARGET: if ZF = 1 the branch is taken (flush), else it continues normally.'],
+  ['Classify: MOV AX,1234H; MOV DX,AX; MOV AL,[0450H]; MOV AX,[BX+DI+08H].','','Immediate, register, direct, based-indexed with displacement.'],
+  ['DS = 1800H, BX = 0200H, DI = 0010H: EA and PA of MOV AX,[BX+DI+20H]?','','EA = 0230H; PA = 18000H + 0230H = 18230H.'],
+  ['Legal? [BX+SI], [BP+DI], [BX+BP], [SI+DI]','One base + one index.','Legal, legal, illegal (two bases), illegal (two indexes).'],
+  ['Clear bits 7 and 6 of AL, keep the rest.','AND with 0s where you clear.','AND AL, 3FH (0011 1111B).']]],
+ ['adr','Addressing-mode exercises','Addressing modes lecture (DS = 1000H, SS = 2000H, ES = 3000H, BX = 0100H, BP = 0200H, SI = 0010H, DI = 0020H)',[
+  ['MOV AL,[0500H]','Direct → DS.','EA 0500H, PA 10500H.'],
+  ['MOV AL,[BX]','Register indirect → DS.','EA 0100H, PA 10100H.'],
+  ['MOV AL,[BP+6]','Based with BP → SS.','EA 0206H, PA 20206H.'],
+  ['MOV AL,[SI+30H]','Indexed → DS.','EA 0040H, PA 10040H.'],
+  ['MOV AL,[BX+DI+4]','Based-indexed → DS.','EA 0124H, PA 10124H.'],
+  ['MOV AL,[BP+SI]','Based-indexed with BP → SS.','EA 0210H, PA 20210H.'],
+  ['MOV AL,ES:[BX+SI]','Override → ES.','EA 0110H, PA 30110H.'],
+  ['MOV AL,DS:[BP]','Override → DS.','EA 0200H, PA 10200H.'],
+  ['Find the errors: MOV [BX],[SI] · MOV AL,[CX] · MOV AX,[SI+DI] · MOV DS,1000H · MOV [DI],7 · IN AL,3F8H','Check each rule.','Memory-to-memory · CX cannot point · two index registers · immediate into segment register · size ambiguous (BYTE/WORD PTR) · port > FFH must use DX.'],
+  ['Fix: MOV ES,3000H · PUSH BL · POP CS · XCHG DS,AX · IN BL,60H · OUT 2F8H,AL · LEA AX,1234H','','MOV AX,3000H/MOV ES,AX · PUSH BX · use RETF or far JMP · PUSH DS/PUSH AX/POP DS/POP AX · IN AL,60H · MOV DX,2F8H/OUT DX,AL · MOV AX,1234H.']]],
+ ['t1','Tutorial 1','Lecture 1 review sheet',[
+  ['A1–A14: define microprocessor, microcomputer, bit, nibble/byte, word, bus, instruction set, addressing mode, assembler, directive, Moore’s Law, FPGA, ASIC, active-low.','One line each.','µP: CPU on one IC. Microcomputer: µP + memory + I/O. Bit: 0/1. Nibble 4 bits, byte 8. Word: bits the ALU handles at once. Bus: shared wires (address/data/control). Instruction set: all operations a CPU understands. Addressing mode: rule to find the operand. Assembler: mnemonics → machine code. Directive: order to the assembler (DB, ORG), no code. Moore: transistors double every 18–24 months. FPGA: grid of logic blocks + programmable switches, user-programmed. ASIC: chip designed for one application. Active-low: acts at 0, drawn with a bar.'],
+  ['C1–C6: compare µP/µC, VN/Harvard, RAM/ROM, the three buses, standard/PLD/ASIC, machine/assembly/high-level.','All in Comparisons.','See the Comparisons tab: each table there matches these rows exactly (on chip, external parts, purpose, cost, example; memory, buses, fetch + data together, speed, found in; etc.).'],
+  ['D1: draw a Von Neumann microcomputer.','Input → µP (ALU, CU, registers) ↔ memory → output.','See chain step 1 picture.'],
+  ['D2: draw Harvard architecture.','Two memories, two buses.','See chain step 2 picture (right half).'],
+  ['D3: system bus with MWTC, MRDC, IOWC, IORC to ROM, RAM, keyboard, printer; which lines each needs.','Read-only, read-write, input, output.','ROM: MRDC · RAM: MRDC + MWTC · keyboard: IORC · printer: IOWC. Picture in chain step 4.'],
+  ['D4: instruction cycle loop + clock wave with period T.','Fetch → Decode → Execute → Store, repeat.','Draw the four-stage loop; under it a square wave and mark one period T between two rising edges.'],
+  ['D5: FPGA internal structure.','Blocks, interconnect, I/O ring.','A 2-D grid of logic blocks, programmable switches/wires between them, and I/O blocks around the edge.'],
+  ['D6: Moore’s Law plot.','Log scale makes it straight.','y = log₂(number of components), x = year: a rising straight line.']]],
+ ['t2','Tutorial 2','Comparisons and problems',[
+  ['A1–A5, B1–B5, C1–C3, D1: the comparison questions.','Use the tables.','Every one is a table in Comparisons: architecture/organization, VN/Harvard (with diagrams and 8086/8051 examples), main memory/cache, RAM/ROM, buses, immediate/register, direct/register-indirect, indexed/based-indexed, CISC/RISC, machine/assembly/high-level, µP/µC, I/O-mapped/memory-mapped, parallel/serial, 8086/8051.'],
+  ['E1: CS = 4042H; BX = 2025H, IP = 0580H, DI = 4247H. Address pointed to by CS?','CS always pairs with IP; BX and DI are distractors.','40420H + 0580H = 409A0H.'],
+  ['E2: SS = 3864H, SP = 1735H, BP = 4826H. Addresses?','SS pairs with SP and BP.','Top of stack: 38640H + 1735H = 39D75H. Via BP: 38640H + 4826H = 3CE66H.'],
+  ['E3: DS = 3032H, BX = 3032H; ADD BX,0008H; MOV [BX],AX. Where is AX stored?','Update BX first, then DS.','BX = 303AH; PA = 30320H + 303AH = 3335AH (AL at 3335AH, AH at 3335BH).']]],
+ ['a1','Assignment 1','Questions on Lecture 2',[
+  ['Draw a typical computer organization with information flow.','Five units.','Input → CPU (ALU + control + registers) ↔ memory → output, with control lines from the control unit to every unit. Chain step 1.'],
+  ['Describe each unit.','','Input brings data/programs in; output sends results out; memory stores program + data; ALU computes and sets flags; control unit fetches, decodes, issues control signals.'],
+  ['Basic constituents of the ALU?','What does it need to compute?','Arithmetic circuit (adder/subtractor), logic circuit (AND, OR, XOR, NOT), shifter, accumulator/temporary registers, flag (status) register, function-select input from control.'],
+  ['Describe the instruction cycle.','Four stages.','Fetch (PC → memory → IR, PC advances) → Decode (CU interprets opcode, finds operands) → Execute (ALU/data move) → Store (result and flags written), repeat; each step timed by the clock.'],
+  ['Different addressing modes?','Where the operand lives.','Immediate, register, direct, register indirect, indexed, based, based-indexed (+ disp); on the 8086 also string, I/O port and implied.'],
+  ['Five general groups of instructions?','','Data transfer, arithmetic, logical, branch (control transfer), machine (processor) control.']]],
+ ['a2','Assignment 2','Questions on Lecture 3',[
+  ['What is a microprocessor; how is it different from a microcomputer; information flow?','Chip vs system.','µP = CPU on one chip. Microcomputer = µP + memory + I/O. Flow: µP puts address on address bus, decoder selects device, control bus says read/write, data moves on the data bus.'],
+  ['What is tristating and its use?','Third state Z.','Output can be 0, 1 or high-impedance. Lets many devices share a bus with only the selected one driving; lets the CPU release the bus for DMA.'],
+  ['Name the data transfer schemes.','','Programmed I/O (synchronous, asynchronous/handshake, interrupt-driven) and DMA.'],
+  ['Device A is much slower than the µP: which scheme? Flowchart.','Don’t make the CPU wait.','Interrupt-driven I/O. Flowchart: main program runs → device ready raises INTR → CPU finishes current instruction → pushes FLAGS, CS, IP → jumps to service routine → transfers data → IRET → main program continues. (Handshake/polled also works but wastes CPU time.)'],
+  ['What is pipeline flushing; how does it occur?','Wrong path.','When a jump/branch/CALL/RET/interrupt changes the instruction flow, prefetched instructions are invalid and are discarded; fetching restarts at the new address. The wait is the penalty.'],
+  ['“Posted write-through” in cache?','Write-through + buffer.','Write-through updates cache and main memory on every write. “Posted” puts the memory write into a write buffer, so the CPU continues immediately; the buffer finishes the write later.'],
+  ['3-stage pipeline, 2 ms per stage, 10 instructions: time saved?','T_seq = nkt, T_pipe = (k+n−1)t.','Sequential = 10 × 6 = 60 ms. Pipelined = (3 + 10 − 1) × 2 = 24 ms. Saved = 36 ms (speed-up 2.5).']]],
+ ['a3','Assignment 3','MCQ, questions and problems',[
+  ['Pin grounded for multiprocessing: DEN, ALE, INTR, (d)?','Max mode = ground.','(d) MN/MX.'],
+  ['8086 segment registers?','','(c) CS, DS, SS, ES.'],
+  ['Not part of the EU: ALU, clock, general registers, flags?','Clock comes from outside.','(b) Clock.'],
+  ['Which bus is bidirectional?','','(c) Data bus.'],
+  ['Number of registers and flags?','14 with IP, 13 without; 9 flags.','(c) 13 and 9.'],
+  ['Not an 8086 register: CS, DS, SS, AS?','','(d) AS — no “address segment” exists.'],
+  ['Functions of EU and BIU?','Execution vs bus work.','BIU: forms 20-bit address, fetches into the 6-byte queue, reads/writes memory and I/O, controls buses. EU: takes from queue, decodes, executes in ALU, holds general registers and flags, computes EA and requests bus cycles.'],
+  ['Pipeline flushing in the 8086: what and when?','','A taken JMP, CALL, RET, interrupt or conditional jump changes CS:IP; queued bytes are wrong, so the queue is cleared and refilled. Not-taken branches don’t flush.'],
+  ['Q1: CS = 4042H, IP = 0580H (BX, DI given). Address?','CS:IP.','409A0H.'],
+  ['Q2: SS = 3864H, SP = 1735H, BP = 4826H.','SS:SP and SS:BP.','39D75H and 3CE66H.'],
+  ['Q3: DS = 3032H, BX = 3032H + 8; MOV [BX],AX.','','3335AH.']]],
+ ['ex','Exam questions','Both midterm papers (treated as a question bank)',[
+  ['MCQ: segment size · address bus · OF name · offset range · first memory level · stack type','','64 KB · 20 bit · Overflow Flag · 0000H to FFFFH · cache memory · LIFO.'],
+  ['MCQ: OF is set when…','Signed.','Signed numbers go out of their range after an arithmetic operation.'],
+  ['MCQ: in a microprocessor (machine cycles)…','Not all instructions are equal.','Some instructions need one machine cycle, others need more.'],
+  ['MCQ: data transfer takes place between…','Think DMA too.','All of the above (µP–memory, µP–I/O, memory–I/O).'],
+  ['MCQ: CS = 020AH, SS = 0801H, SI = 0100H, IP = 1BCDH. Current instruction?','CS:IP only.','020A0H + 1BCDH = 03C6DH.'],
+  ['MCQ: NOT true — coprocessor in max mode / coprocessor in min mode / I/O in both / pipelining','Coprocessor needs 8288.','“Coprocessor is interfaced in min mode.”'],
+  ['MCQ: method that bypasses the microprocessor?','','Direct memory access (DMA).'],
+  ['MCQ: when an interrupt occurs: FLAGS, CS, IP pushed?','All three.','(I), (II) and (III).'],
+  ['128 KB (two 64 KB RAMs at 90000H and B0000H), 20-bit bus, active-low CS: fill the table and design with 74LS138.','Fixed bits → enables, changing bits → CBA.','Table: 90000H–9FFFFH = 1001 + 16 bits; B0000H–BFFFFH = 1011 + 16 bits. A16 → A, A17 → B, A18 → C, A19 → G1, G2A = G2B = GND. Y1 → CS RAM 1, Y3 → CS RAM 2. A0–A15 to both chips. Live in Circuits → C.'],
+  ['MOV [BX + DI + 05H], AX with AX = 0403H, BX = 0605H, DI = 7070H, DS = 0800H.','EA, then DS, then two bytes.','EA = 0605H + 7070H + 05H = 767AH; PA = 08000H + 767AH = 0F67AH; [0F67AH] = 03H, [0F67BH] = 04H.'],
+  ['MOV [BP + 06H], AX with BP = 3030H, SS = 6060H.','BP → SS.','EA = 3036H; PA = 60600H + 3036H = 63636H; [63636H] = 03H, [63637H] = 04H.'],
+  ['CS = 1000H, DS = 2000H, SS = 2002H, SP = 0010H, IP = 0100H, FLAGS = 0046H: current instruction; top of stack; after interrupt top and word on top; data segment range.','CS:IP, SS:SP, SP − 6.','10100H · 20030H · 2002AH holding 0100H (old IP) · 20000H to 2FFFFH. Try it in Practice → stack simulator.']]]
+];
+$('#q-chips').innerHTML='<button class="chip on" data-g="all">All</button>'+Q.map(g=>'<button class="chip" data-g="'+g[0]+'">'+g[1]+' ('+g[3].length+')</button>').join('');
+$('#q-wrap').innerHTML=Q.map(g=>'<div class="qgroup" data-grp="'+g[0]+'"><h3>'+g[1]+'</h3><p class="qsrc">'+g[2]+'</p>'+g[3].map((q,i)=>'<details class="q"><summary><span class="qn">Q'+(i+1)+'</span><span>'+q[0]+'</span></summary><div class="ans">'+(q[1]?'<p><span class="idea">Idea:</span> '+q[1]+'</p>':'')+'<p><b>Answer:</b> '+q[2]+'</p></div></details>').join('')+'</div>').join('');
+$('#q-chips').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;$$('#q-chips .chip').forEach(c=>c.classList.toggle('on',c===b));
+  $$('.qgroup').forEach(d=>d.hidden=!(b.dataset.g==='all'||d.dataset.grp===b.dataset.g));});
+let allOpen=false;$('#q-all').onclick=()=>{allOpen=!allOpen;$$('details.q').forEach(d=>d.open=allOpen);$('#q-all').textContent=allOpen?'Close all answers':'Open all answers';};
+
+/* ---------- quiz ---------- */
+const QZ=[
+ ['The size of each segment in 8086 is','16 KB|24 KB|50 KB|64 KB',3,'A 16-bit offset reaches 2^16 = 64 KB.'],
+ ['In the 8086 the address bus is ___ bit wide.','12|10|16|20',3,'20 lines → 1 MB.'],
+ ['The offset of a segment varies from','00H–FFH|000H–FFFH|0000H–FFFFH|00000H–FFFFFH',2,'Offset = 16 bits. 20 bits is the physical address.'],
+ ['___ is usually the first level of memory access.','Cache memory|Data memory|Main memory|All of the above',0,'The CPU checks the cache first.'],
+ ['The stack works as','LILO|LIFO|FIFO|None',1,'Last in, first out.'],
+ ['The overflow flag is set when','sum > 16 bits|signed numbers go out of range|carry and sign set|subtraction',1,'OF = signed overflow; CF = unsigned.'],
+ ['In a microprocessor','all instructions need one machine cycle|some need one, others more|all need a fraction|some need less than one',1,'Instruction length and memory operands change the count.'],
+ ['In a microcomputer, data transfer takes place between','µP and memory|µP and I/O|memory and I/O|all of the above',3,'Memory–I/O happens with DMA.'],
+ ['CS = 020AH, IP = 1BCDH. Current instruction address?','03C6DH|01DD7H|03D5DH|09BDDH',0,'020A0H + 1BCDH = 03C6DH.'],
+ ['Which is NOT true for the 8086?','Coprocessor in max mode|Coprocessor in min mode|I/O in max/min mode|Supports pipelining',1,'A coprocessor needs maximum mode + 8288.'],
+ ['Which method bypasses the microprocessor?','Software interrupts|Interrupt-driven I/O|Polled I/O|DMA',3,'The DMA controller takes the bus with HOLD/HLDA.'],
+ ['When an interrupt occurs, which are pushed? (I) FLAGS (II) CS (III) IP','I, II and III|I and II|II and III|I and III',0,'FLAGS, then CS, then IP: SP − 6.'],
+ ['Pin grounded for multiprocessing','DEN|ALE|INTR|MN/MX',3,'MN/MX = 0 → maximum mode.'],
+ ['Not part of the EU','ALU|Clock|General registers|Flags',1,'The clock comes from the 8284A.'],
+ ['Which bus is bidirectional?','Address|Control|Data|None',2,'Only data travels both ways.'],
+ ['Default segment for MOV AX,[BP+4]','DS|SS|ES|CS',1,'BP brings the Stack.'],
+ ['First address fetched after RESET','00000H|FFFFFH|FFFF0H|0FFFFH',2,'CS = FFFFH, IP = 0000H.'],
+ ['Which decodes S2 S1 S0 in max mode?','8284|8282|8286|8288',3,'The 8288 bus controller.'],
+ ['S2 S1 S0 = 101 means','I/O read|Memory read|Memory write|Halt',1,'Memory side (1xx), read.'],
+ ['ALE is used to','enable transceivers|latch the address|insert wait states|request the bus',1,'ALE strobes the 8282 latches.'],
+ ['7FH + 01H in AL gives','CF=1, OF=0|CF=0, OF=1|CF=1, OF=1|CF=0, OF=0',1,'127 + 1 leaves signed range but not unsigned.'],
+ ['Legal effective address?','[BX+BP]|[SI+DI]|[BP+SI]|[AX+SI]',2,'One base + one index.'],
+ ['A 3-stage pipeline (2 ms/stage) runs 10 instructions in','60 ms|24 ms|20 ms|30 ms',1,'(3 + 10 − 1) × 2 = 24 ms.'],
+ ['READY = 0 causes','a flush|wait states|an interrupt|a reset',1,'Tw states are added after T3.'],
+ ['Word at 42001H needs','1 bus cycle|2 bus cycles|3 bus cycles|4 bus cycles',1,'Odd address = misaligned.'],
+ ['The 8051 is classified as','VN + RISC|Harvard + CISC|VN + CISC|Harvard + RISC',1,'Separate code/data spaces, CISC instruction set.']
+];
+let score=0,answered=0;
+function quiz(){score=answered=0;$('#qz-score').textContent='0 / '+QZ.length;
+  $('#qz-wrap').innerHTML=QZ.map((q,i)=>'<div data-qi="'+i+'"><p><b>'+(i+1)+'.</b> '+q[0]+'</p>'+q[1].split('|').map((o,j)=>'<button class="opt" data-j="'+j+'">'+o+'</button>').join('')+'<p class="why" hidden></p></div>').join('');}
+$('#qz-wrap').addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b)return;const box=b.parentElement;if(box.dataset.done)return;box.dataset.done=1;
+  const q=QZ[+box.dataset.qi],j=+b.dataset.j;answered++;if(j===q[2])score++;
+  box.querySelectorAll('.opt').forEach((o,k)=>{if(k===q[2])o.classList.add('right');else if(k===j)o.classList.add('wrong');});
+  const w=box.querySelector('.why');w.hidden=false;w.textContent=(j===q[2]?'Correct. ':'Not quite. ')+q[3];$('#qz-score').textContent=score+' / '+QZ.length;});
+$('#qz-reset').onclick=quiz;quiz();
+
+/* ---------- flashcards ---------- */
+const FC=[
+ ['PA formula','Segment × 10H + Offset'],['BP default segment','SS (everything else DS)'],['Pointer registers','Only BX, BP, SI, DI'],['Segment size','64 KB (offset 0000–FFFFH)'],
+ ['Address bus 8086','20 bits → 1 MB'],['Queue','6 bytes, FIFO, in the BIU'],['BIU holds','CS DS SS ES, IP, Σ adder, queue'],['EU holds','ALU, AX–DX, SP BP SI DI, FLAGS'],
+ ['Status flags','CF PF AF ZF SF OF'],['Control flags','TF IF DF'],['CF vs OF','Unsigned vs signed overflow'],['MN/MX = 0','Maximum mode + 8288'],
+ ['ALE','Latches the address (8282 STB)'],['DEN / DT/R','Enable / direction of 8286'],['READY = 0','Insert Tw after T3'],['TEST','Checked by WAIT; 8087 BUSY'],
+ ['NMI','Edge, unmaskable, type 2'],['INTR','Level, maskable by IF'],['RESET','CS = FFFFH, IP = 0 → FFFF0H'],['Interrupt push','FLAGS, CS, IP (SP − 6)'],
+ ['BHE = 0, A0 = 0','Whole word, 1 cycle'],['Odd-address word','2 bus cycles'],['8288 101','Memory read → MRDC'],['8288 010','I/O write → IOWC, AIOWC'],
+ ['QS = 10','Queue emptied'],['RQ/GT priority','RQ/GT0 higher'],['8284A','Crystal ÷ 3, 33% duty'],['5 MHz','T = 200 ns, bus cycle 800 ns'],
+ ['Pipeline time','(k + n − 1) × t'],['Cache avg','h·tc + (1 − h)·tm'],['74LS138 enables','G1 high, G2A/G2B low'],['Von Neumann','One memory, one bus (8086)'],
+ ['Harvard','Two memories, two buses (8051)'],['8051 numbers','4 KB ROM, 128 B RAM, 4 ports, 2 timers, UART, 5 ints'],['XLAT','AL ← [DS:BX + AL]'],['LEA vs MOV','Address vs content']
+];
+function cards(list){$('#fc-wrap').innerHTML=list.map(c=>'<div class="fc" tabindex="0" role="button" aria-label="Flashcard: '+c[0]+'"><div class="fc-in"><div class="fc-f">'+c[0]+'</div><div class="fc-b">'+c[1]+'</div></div></div>').join('');}
+$('#fc-wrap').addEventListener('click',e=>{const c=e.target.closest('.fc');if(c)c.classList.toggle('flip');});
+$('#fc-wrap').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('fc')){e.preventDefault();e.target.classList.toggle('flip');}});
+$('#fc-shuffle').onclick=()=>{const a=FC.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}cards(a);};cards(FC);
+})();
+</script>
+</body>
+</html>
